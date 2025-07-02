@@ -7,7 +7,7 @@ trait CountryData {
   def income_group: String
   def currency_unit: String
   def gdp_usd: Double
-  def population: Long
+  def population: Double
   def gdp_per_capita: Double
   def inflation_rate: Double
   def unemployment_rate: Double
@@ -57,7 +57,7 @@ case class CountryRecord(
   income_group: String,
   currency_unit: String,
   gdp_usd: Double,
-  population: Long,
+  population: Double,
   gdp_per_capita: Double,
   inflation_rate: Double,
   unemployment_rate: Double,
