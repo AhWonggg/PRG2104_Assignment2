@@ -4,6 +4,9 @@ ThisBuild / scalaVersion := "3.3.6"
 lazy val root = (project in file("."))
   .settings(
     name := "Assignment2",
+    
+    // Set MainApp as the default main class
+    Compile / mainClass := Some("MainApp"),
 
     libraryDependencies ++= {
       Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
