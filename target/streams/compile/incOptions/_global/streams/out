@@ -1,0 +1,44 @@
+[0m[[0m[0mdebug[0m] [0m[0mCreated transactional ClassFileManager with tempDir = C:\Users\wong\IdeaProjects\test\CBASS\assignment-2-group-kacang-putih-main\target\scala-3.3.6\classes.bak[0m
+[0m[[0m[0mdebug[0m] [0m[0mAbout to delete class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mWe backup class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mCreated transactional ClassFileManager with tempDir = C:\Users\wong\IdeaProjects\test\CBASS\assignment-2-group-kacang-putih-main\target\scala-3.3.6\classes.bak[0m
+[0m[[0m[0mdebug[0m] [0m[0mAbout to delete class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mWe backup class files:[0m
+[0m[[0m[0mdebug[0m] [0m[0mRegistering generated classes:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentUI.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$2.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MainApp$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$3.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	HeaderReader.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	CountryData.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentUIApplication.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Loader.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$4.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	CountryRecord$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	CountryRecord.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentApp.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentUIApplication$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Loader$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$5.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MainApp.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentUI.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$2.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MainApp$.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$3.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	HeaderReader.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$1.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	CountryData.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentUIApplication.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Loader.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$4.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	CountryRecord$.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	CountryRecord.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentApp.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	DevelopmentUIApplication$.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Loader$.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	Analysis$$anon$5.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0m	MainApp.tasty[0m
+[0m[[0m[0mdebug[0m] [0m[0mRemoving the temporary directory used for backing up class files: C:\Users\wong\IdeaProjects\test\CBASS\assignment-2-group-kacang-putih-main\target\scala-3.3.6\classes.bak[0m
