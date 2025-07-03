@@ -1,10 +1,16 @@
 object MainApp extends App {
   val inputCsv = "src/main/resources/Global_Development_Indicators_2000_2020.csv"
-  // Load data using Loader class
+  val outputTxt = "src/main/resources/output.txt"
+  
+  // Extract headers first
+  HeaderReader.extractHeader(inputCsv, outputTxt)
+  
+  // Load data and perform analysis
   val data = Loader.loadData(inputCsv)
   val analysis = new Analysis(data)
 
-  println("Global Development Data Analysis Results:\n")
+  println("Global Development Data Analysis Results:")
+  println("==========================================\n")
 
   analysis.highestLifeExpectancy match {
     case Some((country, year)) => println(s"1) Country with highest life expectancy: $country in $year")
@@ -20,4 +26,7 @@ object MainApp extends App {
     case Some((country, loss)) => println(f"3) Country with highest forest loss: $country lost $loss%.2f%%")
     case None => println("3) No sufficient data for forest loss.")
   }
+  
+  println("\n==========================================")
+  println("Analysis completed successfully!")
 }

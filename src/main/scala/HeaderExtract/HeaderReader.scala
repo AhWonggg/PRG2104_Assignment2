@@ -1,10 +1,10 @@
 import java.io.{BufferedReader, BufferedWriter, FileReader, FileWriter}
 import java.io.File
 
-class HeaderReader(inputCsv: String, outputTxt: String) {
-
-  // Method to read the header from the CSV file
-  def extractHeader(): Unit = {
+object HeaderReader {
+  
+  // Function to extract headers from CSV file
+  def extractHeader(inputCsv: String, outputTxt: String): Unit = {
     val input = new File(inputCsv)
     if (!input.exists()) {
       println(s"Error: The file $inputCsv does not exist.")
@@ -18,7 +18,7 @@ class HeaderReader(inputCsv: String, outputTxt: String) {
       val line = reader.readLine()
       if (line != null) {
         line.split(",").foreach { header =>
-          writer.write(header)
+          writer.write(header.trim)
           writer.newLine()
         }
       }
@@ -32,6 +32,29 @@ class HeaderReader(inputCsv: String, outputTxt: String) {
     }
   }
 
+  // Function to get headers as a list
+  def getHeaders(inputCsv: String): List[String] = {
+    val input = new File(inputCsv)
+    if (!input.exists()) {
+      return List.empty
+    }
+
+    try {
+      val reader = new BufferedReader(new FileReader(input))
+      val line = reader.readLine()
+      reader.close()
+      
+      if (line != null) {
+        line.split(",").map(_.trim).toList
+      } else {
+        List.empty
+      }
+    } catch {
+      case e: Exception => 
+        println(s"Error reading headers: ${e.getMessage}")
+        List.empty
+    }
+  }
 }
 
 
