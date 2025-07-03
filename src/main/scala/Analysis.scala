@@ -64,12 +64,20 @@ class Analysis(val records: Seq[CountryData]) {
     val grouped = records.groupBy(_.country_name)
 
     val losses = grouped.flatMap { case (country, recs) =>
-      val year2000 = recs.find(_.year == 2000).map(_.forest_area_pct)
-      val year2020 = recs.find(_.year == 2020).map(_.forest_area_pct)
-      for (a2000 <- year2000; a2020 <- year2020) yield country -> (a2000 - a2020)
+      // Filter out global aggregations like "World", regional data, etc.
+      if (country == "World" || country.contains("income") || country.contains("Eastern") || 
+          country.contains("Western") || country.contains("Southern") || country.contains("Northern") ||
+          country.contains("Africa") || country.contains("Asia") || country.contains("Europe") ||
+          country.contains("America") || country.contains("OECD") || country.contains("Union")) {
+        None
+      } else {
+        val year2000 = recs.find(_.year == 2000).map(_.forest_area_pct)
+        val year2020 = recs.find(_.year == 2020).map(_.forest_area_pct)
+        for (a2000 <- year2000; a2020 <- year2020 if a2000 > 0 && a2020 >= 0) yield country -> (a2000 - a2020)
+      }
     }
 
-    losses.toSeq.sortBy(-_._2).headOption
+    losses.toSeq.filter(_._2 > 0).sortBy(-_._2).headOption
   }
 
   private def normalize(data: Seq[(String, Double)], higherIsBetter: Boolean): Map[String, Double] = {
