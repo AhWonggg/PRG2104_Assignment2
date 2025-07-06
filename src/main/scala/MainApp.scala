@@ -29,4 +29,12 @@ object MainApp extends App {
   
   println("\n==========================================")
   println("Analysis completed successfully!")
+  
+  // Launch GUI after console output
+  println("\nLaunching ScalaFX GUI interface...")
+  
+  // Launch ScalaFX GUI in a separate thread
+  new Thread(() => {
+    DevelopmentApp.main(Array.empty)
+  }).start()
 }

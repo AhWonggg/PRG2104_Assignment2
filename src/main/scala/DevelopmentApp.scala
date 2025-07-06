@@ -1,21 +1,22 @@
-import javafx.application.Application
-import javafx.scene.Scene
-import javafx.stage.Stage
+import scalafx.application.JFXApp3
+import scalafx.scene.Scene
+import scalafx.stage.Stage
 
-class DevelopmentApp extends Application {
-  override def start(primaryStage: Stage): Unit = {
-    val data = CountryDataLoader.loadData("src//main//resources//Global_Development_Indicators_2000_2020.csv")
+object DevelopmentApp extends JFXApp3 {
+  override def start(): Unit = {
+    // Load data using the updated Loader
+    val inputCsv = "src/main/resources/Global_Development_Indicators_2000_2020.csv"
+    val data = Loader.loadData(inputCsv)
     val analysis = new Analysis(data)
-    val root = new DevelopmentUI(analysis).generateUI()
-    val scene = new Scene(root, 800, 400)
-    primaryStage.setTitle("Global Development Viewer")
-    primaryStage.setScene(scene)
-    primaryStage.show()
-  }
-}
-
-object DevelopmentUIApplication {
-  def main(args: Array[String]): Unit = {
-    Application.launch(classOf[DevelopmentApp], args: _*)
+    
+    // Create the UI
+    val ui = new DevelopmentUI(analysis)
+    
+    // Configure the window
+    stage = new JFXApp3.PrimaryStage {
+      title = "Global Development Data Analysis - GUI"
+      scene = new Scene(ui.generateUI(), 900, 600)
+      resizable = true
+    }
   }
 }
