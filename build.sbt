@@ -5,15 +5,11 @@ lazy val root = (project in file("."))
   .settings(
     name := "Assignment2",
     
-    // Set MainApp as the default main class
+    // Set MainApp as the default main class (includes both CLI and GUI)
     Compile / mainClass := Some("MainApp"),
 
-    libraryDependencies ++= {
-      Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
-        .map(m => "org.openjfx" % s"javafx-$m" % "21.0.4")
-    },
-
-    libraryDependencies += "org.scalafx" %% "scalafx" % "24.0.0-R35",
+    // ScalaFX dependencies (replaces JavaFX)
+    libraryDependencies += "org.scalafx" %% "scalafx" % "18.0.2-R29",
 
     libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "2.0.0"
   )
