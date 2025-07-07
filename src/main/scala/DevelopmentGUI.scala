@@ -1,489 +1,552 @@
-import scalafx.Includes.*
-import scalafx.animation.*
-import scalafx.application.JFXApp3
-import scalafx.geometry.*
-import scalafx.scene.Scene
-import scalafx.scene.control.*
-import scalafx.scene.effect.*
-import scalafx.scene.layout.*
-import scalafx.scene.paint.*
-import scalafx.scene.text.*
-import scalafx.util.Duration
+import javax.swing._
+import java.awt._
+import java.awt.event.{MouseAdapter, MouseEvent}
 
 /**
- * Enhanced Professional ScalaFX GUI for Global Development Analytics
- * Features: Modern design, animations, professional styling, and improved UX
+ * Dynamic Visual GUI with Left-Aligned Questions and Rich Visual Appeal
  */
-object DevelopmentGUI extends JFXApp3 {
+object DevelopmentGUI {
 
-  // Color palette for professional design
-  private val primaryBlue = "#2563eb"
-  private val secondaryBlue = "#3b82f6"
-  private val accentGreen = "#10b981"
-  private val accentOrange = "#f59e0b"
-  private val accentRed = "#ef4444"
-  private val neutralGray = "#6b7280"
-  private val lightGray = "#f8fafc"
-  private val darkGray = "#1f2937"
-  private val cardBackground = "rgba(255,255,255,0.95)"
+  // Rich color palette
+  private val primaryDark = new Color(15, 23, 42)
+  private val primaryBlue = new Color(37, 99, 235)
+  private val primaryBlueLight = new Color(59, 130, 246)
+  private val surfaceWhite = new Color(255, 255, 255)
+  private val backgroundGray = new Color(248, 250, 252)
+  private val backgroundGradient = new Color(243, 244, 246)
+  private val accentGreen = new Color(34, 197, 94)
+  private val accentGreenLight = new Color(74, 222, 128)
+  private val accentOrange = new Color(234, 88, 12)
+  private val accentOrangeLight = new Color(251, 146, 60)
+  private val accentRed = new Color(239, 68, 68)
+  private val accentRedLight = new Color(248, 113, 113)
+  private val textPrimary = new Color(15, 23, 42)
+  private val textSecondary = new Color(100, 116, 139)
+  private val textMuted = new Color(148, 163, 184)
+  private val borderLight = new Color(226, 232, 240)
+  private val shadowColor = new Color(0, 0, 0, 15)
 
-  override def start(): Unit = {
-    val analysis: Analysis = loadAnalysisData()
+  def launch(): Unit = {
+    SwingUtilities.invokeLater(() => createDynamicGUI())
+  }
 
-    stage = new JFXApp3.PrimaryStage {
-      title = "Global Development Analytics - Professional Dashboard"
-      width = 1200
-      height = 800
-      minWidth = 1000
-      minHeight = 700
+  private def createDynamicGUI(): Unit = {
+    val analysis = loadData()
 
-      scene = new Scene {
-        fill = createBackgroundGradient()
-        root = createMainLayout(analysis)
+    val frame = new JFrame("Global Development Analytics")
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
+    frame.setSize(1400, 950)
+    frame.setLocationRelativeTo(null)
+    frame.setBackground(backgroundGray)
 
-        // Add subtle fade-in animation
-        opacity = 0.0
-        val fadeIn: FadeTransition = new FadeTransition(Duration(800), root.value) {
-          fromValue = 0.0
-          toValue = 1.0
-        }
-        fadeIn.play()
+    val mainContainer = new JPanel(new BorderLayout())
+    mainContainer.setBackground(backgroundGray)
+
+    mainContainer.add(createRichHeader(analysis), BorderLayout.NORTH)
+    mainContainer.add(createDynamicBody(analysis), BorderLayout.CENTER)
+    mainContainer.add(createStylizedFooter(), BorderLayout.SOUTH)
+
+    frame.add(mainContainer)
+    frame.setVisible(true)
+    frame.toFront()
+  }
+
+  private def createRichHeader(analysis: Analysis): JPanel = {
+    val headerContainer = new JPanel(new BorderLayout())
+    headerContainer.setBackground(surfaceWhite)
+    headerContainer.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(primaryBlue.getRed, primaryBlue.getGreen, primaryBlue.getBlue, 30)),
+      BorderFactory.createEmptyBorder(50, 60, 50, 60)
+    ))
+
+    // Dynamic brand section
+    val brandSection = new JPanel()
+    brandSection.setLayout(new BoxLayout(brandSection, BoxLayout.Y_AXIS))
+    brandSection.setBackground(surfaceWhite)
+
+    val brandContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 0))
+    brandContainer.setBackground(surfaceWhite)
+
+    val brandIcon = new JLabel("⬢")
+    brandIcon.setFont(new Font("Arial", Font.BOLD, 36))
+    brandIcon.setForeground(primaryBlue)
+
+    val mainTitle = new JLabel("Global Development Analytics")
+    mainTitle.setFont(new Font("Arial", Font.BOLD, 42))
+    mainTitle.setForeground(textPrimary)
+
+    brandContainer.add(brandIcon)
+    brandContainer.add(mainTitle)
+
+    val subtitle = new JLabel("Advanced Intelligence & Data Visualization Platform", SwingConstants.CENTER)
+    subtitle.setFont(new Font("Arial", Font.PLAIN, 17))
+    subtitle.setForeground(textSecondary)
+    subtitle.setAlignmentX(Component.CENTER_ALIGNMENT)
+
+    brandSection.add(brandContainer)
+    brandSection.add(Box.createVerticalStrut(15))
+    brandSection.add(subtitle)
+
+    // Rich metrics dashboard
+    val metricsSection = createRichMetricsGrid(analysis)
+
+    headerContainer.add(brandSection, BorderLayout.CENTER)
+    headerContainer.add(metricsSection, BorderLayout.SOUTH)
+
+    headerContainer
+  }
+
+  private def createRichMetricsGrid(analysis: Analysis): JPanel = {
+    val metricsContainer = new JPanel(new GridBagLayout())
+    metricsContainer.setBackground(surfaceWhite)
+    metricsContainer.setBorder(BorderFactory.createEmptyBorder(45, 0, 0, 0))
+
+    val gbc = new GridBagConstraints()
+    gbc.insets = new Insets(0, 25, 0, 25)
+    gbc.fill = GridBagConstraints.BOTH
+    gbc.weightx = 1.0
+
+    val recordCount = analysis.records.length
+    val countryCount = analysis.records.map(_.country_name).distinct.length
+    val yearRange = if (analysis.records.nonEmpty) {
+      val years = analysis.records.map(_.year)
+      s"${years.min}–${years.max}"
+    } else "No data"
+
+    gbc.gridx = 0
+    metricsContainer.add(createDynamicMetricCard("📊", "Data Records", f"$recordCount%,d", "Total Indicators", primaryBlue, primaryBlueLight), gbc)
+
+    gbc.gridx = 1
+    metricsContainer.add(createDynamicMetricCard("🌍", "Global Reach", countryCount.toString, "Countries Analyzed", accentGreen, accentGreenLight), gbc)
+
+    gbc.gridx = 2
+    metricsContainer.add(createDynamicMetricCard("📅", "Time Coverage", yearRange, "Years of Data", accentOrange, accentOrangeLight), gbc)
+
+    metricsContainer
+  }
+
+  private def createDynamicMetricCard(icon: String, title: String, value: String, subtitle: String,
+                                      primaryColor: Color, lightColor: Color): JPanel = {
+    val card = new JPanel(new BorderLayout())
+    card.setBackground(surfaceWhite)
+    card.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(borderLight, 1),
+        BorderFactory.createLineBorder(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 40), 2)
+      ),
+      BorderFactory.createEmptyBorder(25, 20, 25, 20)
+    ))
+    card.setPreferredSize(new Dimension(300, 150))
+
+    // Icon section
+    val iconPanel = new JPanel(new FlowLayout(FlowLayout.CENTER))
+    iconPanel.setBackground(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 20))
+    iconPanel.setPreferredSize(new Dimension(300, 40))
+
+    val iconLabel = new JLabel(icon)
+    iconLabel.setFont(new Font("Arial", Font.BOLD, 20))
+    iconPanel.add(iconLabel)
+
+    // Content section
+    val contentPanel = new JPanel()
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS))
+    contentPanel.setBackground(surfaceWhite)
+    contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0))
+
+    val titleLabel = new JLabel(title, SwingConstants.CENTER)
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 13))
+    titleLabel.setForeground(textSecondary)
+    titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT)
+
+    val valueLabel = new JLabel(value, SwingConstants.CENTER)
+    valueLabel.setFont(new Font("Arial", Font.BOLD, 28))
+    valueLabel.setForeground(primaryColor)
+    valueLabel.setAlignmentX(Component.CENTER_ALIGNMENT)
+
+    val subtitleLabel = new JLabel(subtitle, SwingConstants.CENTER)
+    subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 11))
+    subtitleLabel.setForeground(textMuted)
+    subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT)
+
+    contentPanel.add(titleLabel)
+    contentPanel.add(Box.createVerticalStrut(8))
+    contentPanel.add(valueLabel)
+    contentPanel.add(Box.createVerticalStrut(5))
+    contentPanel.add(subtitleLabel)
+
+    card.add(iconPanel, BorderLayout.NORTH)
+    card.add(contentPanel, BorderLayout.CENTER)
+
+    // Add hover effect
+    addInteractiveEffect(card, primaryColor, lightColor)
+
+    card
+  }
+
+  private def createDynamicBody(analysis: Analysis): JScrollPane = {
+    val bodyPanel = new JPanel()
+    bodyPanel.setLayout(new BoxLayout(bodyPanel, BoxLayout.Y_AXIS))
+    bodyPanel.setBackground(backgroundGray)
+    bodyPanel.setBorder(BorderFactory.createEmptyBorder(50, 60, 80, 60))
+
+    // Rich status section
+    bodyPanel.add(createRichStatusSection(analysis))
+    bodyPanel.add(Box.createVerticalStrut(60))
+
+    // Dynamic section header
+    bodyPanel.add(createDynamicSectionHeader())
+    bodyPanel.add(Box.createVerticalStrut(50))
+
+    // Dynamic analysis cards with left-aligned questions
+    bodyPanel.add(createDynamicAnalysisCard(
+      "01", "🏥", "Life Expectancy Excellence",
+      "Which country achieved the highest life expectancy standards and set the global benchmark for healthcare quality?",
+      getLifeExpectancyAnswer(analysis),
+      accentGreen,
+      accentGreenLight,
+      "Health Intelligence"
+    ))
+    bodyPanel.add(Box.createVerticalStrut(35))
+
+    bodyPanel.add(createDynamicAnalysisCard(
+      "02", "🎓", "Human Development Leadership",
+      "Which nation demonstrates the most comprehensive excellence across health, education, and social development metrics?",
+      getHealthEducationAnswer(analysis),
+      primaryBlue,
+      primaryBlueLight,
+      "Social Progress"
+    ))
+    bodyPanel.add(Box.createVerticalStrut(35))
+
+    bodyPanel.add(createDynamicAnalysisCard(
+      "03", "🌳", "Environmental Impact Assessment",
+      "Which country experienced the most significant environmental transformation and what does this reveal about conservation challenges?",
+      getForestLossAnswer(analysis),
+      accentRed,
+      accentRedLight,
+      "Environmental Intelligence"
+    ))
+
+    val scrollPane = new JScrollPane(bodyPanel)
+    scrollPane.setBorder(null)
+    scrollPane.getViewport.setBackground(backgroundGray)
+    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED)
+    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER)
+
+    // Ultra-smooth scrolling
+    scrollPane.getVerticalScrollBar.setUnitIncrement(25)
+    scrollPane.getVerticalScrollBar.setBlockIncrement(100)
+
+    scrollPane
+  }
+
+  private def createRichStatusSection(analysis: Analysis): JPanel = {
+    val isLoaded = analysis.records.nonEmpty
+    val statusColor = if (isLoaded) accentGreen else accentRed
+    val lightColor = if (isLoaded) accentGreenLight else accentRedLight
+    val statusIcon = if (isLoaded) "✓" else "✗"
+    val statusText = if (isLoaded) "System Status: Fully Operational" else "System Status: Error Detected"
+    val detailText = if (isLoaded)
+      f"Successfully processing ${analysis.records.length}%,d development indicators from ${analysis.records.map(_.country_name).distinct.length} countries across the globe"
+    else
+      "Data pipeline validation failed - please verify source configuration and retry"
+
+    val dashboard = new JPanel(new BorderLayout())
+    dashboard.setBackground(surfaceWhite)
+    dashboard.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(statusColor.getRed, statusColor.getGreen, statusColor.getBlue, 60), 2),
+        BorderFactory.createLineBorder(surfaceWhite, 3)
+      ),
+      BorderFactory.createEmptyBorder(30, 40, 30, 40)
+    ))
+    dashboard.setMaximumSize(new Dimension(1100, 130))
+
+    // Status header with icon
+    val statusContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0))
+    statusContainer.setBackground(surfaceWhite)
+
+    val iconBadge = new JLabel(statusIcon)
+    iconBadge.setFont(new Font("Arial", Font.BOLD, 20))
+    iconBadge.setForeground(Color.WHITE)
+    iconBadge.setOpaque(true)
+    iconBadge.setBackground(statusColor)
+    iconBadge.setHorizontalAlignment(SwingConstants.CENTER)
+    iconBadge.setPreferredSize(new Dimension(40, 40))
+    iconBadge.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8))
+
+    val statusLabel = new JLabel(statusText)
+    statusLabel.setFont(new Font("Arial", Font.BOLD, 20))
+    statusLabel.setForeground(statusColor)
+
+    statusContainer.add(iconBadge)
+    statusContainer.add(statusLabel)
+
+    val detailLabel = new JLabel(detailText, SwingConstants.CENTER)
+    detailLabel.setFont(new Font("Arial", Font.PLAIN, 14))
+    detailLabel.setForeground(textSecondary)
+
+    val contentPanel = new JPanel()
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS))
+    contentPanel.setBackground(surfaceWhite)
+
+    statusContainer.setAlignmentX(Component.CENTER_ALIGNMENT)
+    detailLabel.setAlignmentX(Component.CENTER_ALIGNMENT)
+
+    contentPanel.add(statusContainer)
+    contentPanel.add(Box.createVerticalStrut(12))
+    contentPanel.add(detailLabel)
+
+    dashboard.add(contentPanel, BorderLayout.CENTER)
+
+    val wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER))
+    wrapper.setBackground(backgroundGray)
+    wrapper.add(dashboard)
+
+    wrapper
+  }
+
+  private def createDynamicSectionHeader(): JPanel = {
+    val headerContainer = new JPanel()
+    headerContainer.setLayout(new BoxLayout(headerContainer, BoxLayout.Y_AXIS))
+    headerContainer.setBackground(backgroundGray)
+
+    val titleLabel = new JLabel("Intelligence Analysis Reports", SwingConstants.CENTER)
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 36))
+    titleLabel.setForeground(textPrimary)
+    titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT)
+
+    val subtitleLabel = new JLabel("Comprehensive Global Development Insights & Strategic Intelligence", SwingConstants.CENTER)
+    subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 16))
+    subtitleLabel.setForeground(textSecondary)
+    subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT)
+
+    // Decorative divider
+    val dividerContainer = new JPanel(new FlowLayout(FlowLayout.CENTER))
+    dividerContainer.setBackground(backgroundGray)
+
+    val leftDivider = new JPanel()
+    leftDivider.setBackground(primaryBlue)
+    leftDivider.setPreferredSize(new Dimension(80, 3))
+
+    val centerDot = new JLabel("●")
+    centerDot.setFont(new Font("Arial", Font.BOLD, 12))
+    centerDot.setForeground(primaryBlue)
+
+    val rightDivider = new JPanel()
+    rightDivider.setBackground(primaryBlue)
+    rightDivider.setPreferredSize(new Dimension(80, 3))
+
+    dividerContainer.add(leftDivider)
+    dividerContainer.add(Box.createHorizontalStrut(15))
+    dividerContainer.add(centerDot)
+    dividerContainer.add(Box.createHorizontalStrut(15))
+    dividerContainer.add(rightDivider)
+
+    headerContainer.add(titleLabel)
+    headerContainer.add(Box.createVerticalStrut(10))
+    headerContainer.add(subtitleLabel)
+    headerContainer.add(Box.createVerticalStrut(25))
+    headerContainer.add(dividerContainer)
+
+    headerContainer
+  }
+
+  private def createDynamicAnalysisCard(number: String, icon: String, title: String, question: String,
+                                        answer: String, primaryColor: Color, lightColor: Color, category: String): JPanel = {
+    val card = new JPanel(new BorderLayout())
+    card.setBackground(surfaceWhite)
+    card.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(borderLight, 1),
+        BorderFactory.createMatteBorder(0, 5, 0, 0, primaryColor)
+      ),
+      BorderFactory.createEmptyBorder(35, 40, 35, 40)
+    ))
+    card.setMaximumSize(new Dimension(1200, 280))
+    card.setPreferredSize(new Dimension(1200, 280))
+
+    // Header with number badge, icon, and title
+    val headerPanel = new JPanel(new BorderLayout())
+    headerPanel.setBackground(surfaceWhite)
+
+    val leftSection = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0))
+    leftSection.setBackground(surfaceWhite)
+
+    val numberBadge = new JLabel(number)
+    numberBadge.setFont(new Font("Arial", Font.BOLD, 18))
+    numberBadge.setForeground(Color.WHITE)
+    numberBadge.setOpaque(true)
+    numberBadge.setBackground(primaryColor)
+    numberBadge.setHorizontalAlignment(SwingConstants.CENTER)
+    numberBadge.setPreferredSize(new Dimension(45, 45))
+    numberBadge.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10))
+
+    val iconLabel = new JLabel(icon)
+    iconLabel.setFont(new Font("Arial", Font.BOLD, 24))
+    iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 15))
+
+    val titleLabel = new JLabel(title)
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 24))
+    titleLabel.setForeground(textPrimary)
+
+    leftSection.add(numberBadge)
+    leftSection.add(iconLabel)
+    leftSection.add(titleLabel)
+
+    val categoryBadge = new JLabel(category)
+    categoryBadge.setFont(new Font("Arial", Font.BOLD, 12))
+    categoryBadge.setForeground(primaryColor)
+    categoryBadge.setOpaque(true)
+    categoryBadge.setBackground(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 25))
+    categoryBadge.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createLineBorder(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 80), 1),
+      BorderFactory.createEmptyBorder(10, 20, 10, 20)
+    ))
+
+    headerPanel.add(leftSection, BorderLayout.WEST)
+    headerPanel.add(categoryBadge, BorderLayout.EAST)
+
+    // Main content with left question and right answer
+    val contentPanel = new JPanel(new BorderLayout(40, 0))
+    contentPanel.setBackground(surfaceWhite)
+    contentPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0))
+
+    // Left side - Question
+    val questionPanel = new JPanel(new BorderLayout())
+    questionPanel.setBackground(new Color(textSecondary.getRed, textSecondary.getGreen, textSecondary.getBlue, 15))
+    questionPanel.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createLineBorder(new Color(textSecondary.getRed, textSecondary.getGreen, textSecondary.getBlue, 40), 1),
+      BorderFactory.createEmptyBorder(25, 25, 25, 25)
+    ))
+    questionPanel.setPreferredSize(new Dimension(500, 120))
+
+    val questionHeader = new JLabel("Research Question")
+    questionHeader.setFont(new Font("Arial", Font.BOLD, 12))
+    questionHeader.setForeground(textSecondary)
+
+    val questionLabel = new JLabel(s"<html><div style='width: 450px; line-height: 1.4;'>$question</div></html>")
+    questionLabel.setFont(new Font("Arial", Font.PLAIN, 14))
+    questionLabel.setForeground(textSecondary)
+
+    val questionContent = new JPanel()
+    questionContent.setLayout(new BoxLayout(questionContent, BoxLayout.Y_AXIS))
+    questionContent.setBackground(new Color(textSecondary.getRed, textSecondary.getGreen, textSecondary.getBlue, 15))
+
+    questionHeader.setAlignmentX(Component.LEFT_ALIGNMENT)
+    questionLabel.setAlignmentX(Component.LEFT_ALIGNMENT)
+
+    questionContent.add(questionHeader)
+    questionContent.add(Box.createVerticalStrut(8))
+    questionContent.add(questionLabel)
+
+    questionPanel.add(questionContent, BorderLayout.CENTER)
+
+    // Right side - Answer
+    val answerPanel = new JPanel(new BorderLayout())
+    answerPanel.setBackground(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 15))
+    answerPanel.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createLineBorder(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 60), 2),
+      BorderFactory.createEmptyBorder(25, 25, 25, 25)
+    ))
+
+    val answerHeader = new JLabel("Analysis Result")
+    answerHeader.setFont(new Font("Arial", Font.BOLD, 12))
+    answerHeader.setForeground(primaryColor)
+
+    val answerLabel = new JLabel(s"<html><div style='width: 580px; line-height: 1.5; font-weight: bold;'>$answer</div></html>")
+    answerLabel.setFont(new Font("Arial", Font.PLAIN, 14))
+    answerLabel.setForeground(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 200))
+
+    val answerContent = new JPanel()
+    answerContent.setLayout(new BoxLayout(answerContent, BoxLayout.Y_AXIS))
+    answerContent.setBackground(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 15))
+
+    answerHeader.setAlignmentX(Component.LEFT_ALIGNMENT)
+    answerLabel.setAlignmentX(Component.LEFT_ALIGNMENT)
+
+    answerContent.add(answerHeader)
+    answerContent.add(Box.createVerticalStrut(8))
+    answerContent.add(answerLabel)
+
+    answerPanel.add(answerContent, BorderLayout.CENTER)
+
+    contentPanel.add(questionPanel, BorderLayout.WEST)
+    contentPanel.add(answerPanel, BorderLayout.CENTER)
+
+    card.add(headerPanel, BorderLayout.NORTH)
+    card.add(contentPanel, BorderLayout.CENTER)
+
+    // Add interactive effects
+    addInteractiveEffect(card, primaryColor, lightColor)
+
+    val wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER))
+    wrapper.setBackground(backgroundGray)
+    wrapper.add(card)
+
+    wrapper
+  }
+
+  private def createStylizedFooter(): JPanel = {
+    val footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER))
+    footerPanel.setBackground(surfaceWhite)
+    footerPanel.setBorder(BorderFactory.createCompoundBorder(
+      BorderFactory.createMatteBorder(2, 0, 0, 0, new Color(primaryBlue.getRed, primaryBlue.getGreen, primaryBlue.getBlue, 30)),
+      BorderFactory.createEmptyBorder(35, 0, 35, 0)
+    ))
+
+    val footerLabel = new JLabel("Global Development Analytics • Advanced Intelligence Platform • Enterprise Edition © 2024")
+    footerLabel.setFont(new Font("Arial", Font.ITALIC, 14))
+    footerLabel.setForeground(textMuted)
+
+    footerPanel.add(footerLabel)
+    footerPanel
+  }
+
+  private def addInteractiveEffect(component: JComponent, primaryColor: Color, lightColor: Color): Unit = {
+    component.addMouseListener(new MouseAdapter {
+      override def mouseEntered(e: MouseEvent): Unit = {
+        component.setBackground(new Color(primaryColor.getRed, primaryColor.getGreen, primaryColor.getBlue, 8))
+        component.repaint()
       }
-    }
+
+      override def mouseExited(e: MouseEvent): Unit = {
+        component.setBackground(surfaceWhite)
+        component.repaint()
+      }
+    })
   }
 
-  private def createBackgroundGradient(): LinearGradient = {
-    LinearGradient(0, 0, 1, 1, true, CycleMethod.NoCycle,
-      Stop(0, Color.web("#f1f5f9")),
-      Stop(0.5, Color.web("#e2e8f0")),
-      Stop(1, Color.web("#cbd5e1"))
-    )
-  }
-
-  private def loadAnalysisData(): Analysis = {
+  private def loadData(): Analysis = {
     val inputCsv = "src/main/resources/Global_Development_Indicators_2000_2020.csv"
     val data = Loader.loadData(inputCsv)
     new Analysis(data)
   }
 
-  private def createMainLayout(analysis: Analysis): BorderPane = {
-    new BorderPane {
-      padding = Insets(25)
-      top = createHeaderSection(analysis)
-      center = createMainContent(analysis)
-      bottom = createFooterSection()
-    }
-  }
-
-  private def createHeaderSection(analysis: Analysis): VBox = {
-    val titleContainer = new HBox {
-      alignment = Pos.Center
-      spacing = 20
-
-      children = Seq(
-        // App icon/logo placeholder
-        new Label("🌍") {
-          font = Font.font("Apple Color Emoji", 48)
-          effect = new DropShadow(5, Color.web("#00000020"))
-        },
-
-        new VBox {
-          alignment = Pos.CenterLeft
-          spacing = 5
-          children = Seq(
-            new Label("Global Development Analytics") {
-              font = Font.font("Segoe UI", FontWeight.Bold, 42)
-              textFill = Color.web(darkGray)
-              effect = new DropShadow(2, Color.web("#00000015"))
-            },
-            new Label("Professional Insights Dashboard") {
-              font = Font.font("Segoe UI", FontWeight.Normal, 18)
-              textFill = Color.web(neutralGray)
-            }
-          )
-        }
-      )
-    }
-
-    val statsBar = createStatsBar(analysis)
-
-    new VBox(30, titleContainer, statsBar) {
-      alignment = Pos.Center
-      padding = Insets(0, 0, 25, 0)
-    }
-  }
-
-  private def createStatsBar(analysis: Analysis): HBox = {
-    val recordCount: Int = analysis.records.length
-    val countryCount: Int = analysis.records.map(_.country_name).distinct.length
-    val yearRange: String = if (analysis.records.nonEmpty) {
-      val years = analysis.records.map(_.year)
-      s"${years.min} - ${years.max}"
-    } else "No data"
-
-    val stats: Seq[(String, String, String, String)] = Seq(
-      ("📊", "Total Records", recordCount.toString, primaryBlue),
-      ("🌎", "Countries", countryCount.toString, accentGreen),
-      ("📅", "Year Range", yearRange, accentOrange)
-    )
-
-    new HBox(20) {
-      alignment = Pos.Center
-      children = stats.map { case (icon, label, value, color) =>
-        createStatCard(icon, label, value, color)
-      }
-    }
-  }
-
-  private def createStatCard(icon: String, label: String, value: String, color: String): VBox = {
-    new VBox {
-      alignment = Pos.Center
-      spacing = 8
-      padding = Insets(20, 30, 20, 30)
-      minWidth = 150
-
-      style = s"""
-        -fx-background-color: $cardBackground;
-        -fx-background-radius: 12;
-        -fx-effect: dropshadow(gaussian, #00000020, 8, 0.3, 0, 2);
-        -fx-border-color: ${color}40;
-        -fx-border-width: 1;
-        -fx-border-radius: 12;
-      """
-
-      children = Seq(
-        new Label(icon) {
-          font = Font.font("Apple Color Emoji", 28)
-        },
-        new Label(value) {
-          font = Font.font("Segoe UI", FontWeight.Bold, 24)
-          textFill = Color.web(color)
-        },
-        new Label(label) {
-          font = Font.font("Segoe UI", FontWeight.Normal, 12)
-          textFill = Color.web(neutralGray)
-        }
-      )
-
-      onMouseEntered = (_: scalafx.scene.input.MouseEvent) => {
-        style = s"""
-          -fx-background-color: $cardBackground;
-          -fx-background-radius: 12;
-          -fx-effect: dropshadow(gaussian, #00000030, 12, 0.4, 0, 4);
-          -fx-border-color: $color;
-          -fx-border-width: 2;
-          -fx-border-radius: 12;
-          -fx-scale-x: 1.05;
-          -fx-scale-y: 1.05;
-        """
-      }
-
-      onMouseExited = (_: scalafx.scene.input.MouseEvent) => {
-        style = s"""
-          -fx-background-color: $cardBackground;
-          -fx-background-radius: 12;
-          -fx-effect: dropshadow(gaussian, #00000020, 8, 0.3, 0, 2);
-          -fx-border-color: ${color}40;
-          -fx-border-width: 1;
-          -fx-border-radius: 12;
-          -fx-scale-x: 1.0;
-          -fx-scale-y: 1.0;
-        """
-      }
-    }
-  }
-
-  private def createMainContent(analysis: Analysis): ScrollPane = {
-    val contentVBox = new VBox(30) {
-      padding = Insets(20)
-      alignment = Pos.TopCenter
-      maxWidth = 1000
-
-      children = Seq(
-        createDataStatusCard(analysis),
-        createAnalysisSection(analysis)
-      )
-    }
-
-    new ScrollPane {
-      content = contentVBox
-      fitToWidth = true
-      hbarPolicy = ScrollPane.ScrollBarPolicy.Never
-      vbarPolicy = ScrollPane.ScrollBarPolicy.AsNeeded
-      style = "-fx-background: transparent; -fx-background-color: transparent;"
-
-      // Center the content
-      val wrapper: HBox = new HBox(contentVBox) {
-        alignment = Pos.TopCenter
-        fillHeight = false
-      }
-      content = wrapper
-    }
-  }
-
-  private def createDataStatusCard(analysis: Analysis): VBox = {
-    val isDataLoaded: Boolean = analysis.records.nonEmpty
-    val statusColor: String = if (isDataLoaded) accentGreen else accentRed
-    val statusIcon: String = if (isDataLoaded) "✅" else "⚠️"
-    val statusText: String = if (isDataLoaded)
-      "Data Successfully Loaded"
-    else
-      "Data Loading Failed"
-
-    val detailText: String = if (isDataLoaded)
-      f"Successfully processed ${analysis.records.length}%,d development indicators from ${analysis.records.map(_.country_name).distinct.length} countries worldwide"
-    else
-      "Please verify your data source configuration and ensure the CSV file is accessible"
-
-    new VBox {
-      alignment = Pos.Center
-      spacing = 15
-      padding = Insets(30)
-      maxWidth = 800
-
-      style = s"""
-        -fx-background-color: $cardBackground;
-        -fx-background-radius: 16;
-        -fx-effect: dropshadow(gaussian, #00000025, 10, 0.4, 0, 3);
-        -fx-border-color: ${statusColor}30;
-        -fx-border-width: 2;
-        -fx-border-radius: 16;
-      """
-
-      children = Seq(
-        new HBox {
-          alignment = Pos.Center
-          spacing = 15
-          children = Seq(
-            new Label(statusIcon) {
-              font = Font.font("Apple Color Emoji", 32)
-            },
-            new Label(statusText) {
-              font = Font.font("Segoe UI", FontWeight.Bold, 20)
-              textFill = Color.web(statusColor)
-            }
-          )
-        },
-        new Label(detailText) {
-          font = Font.font("Segoe UI", FontWeight.Normal, 14)
-          textFill = Color.web(neutralGray)
-          textAlignment = TextAlignment.Center
-          wrapText = true
-          maxWidth = 700
-        }
-      )
-    }
-  }
-
-  private def createAnalysisSection(analysis: Analysis): VBox = {
-    val questions: List[(String, String, String, String, String, String)] = List(
-      ("💚", "Life Expectancy Excellence", "Which country achieved the highest life expectancy?",
-        getLifeExpectancyAnswer(analysis), accentGreen, "Health & Longevity"),
-      ("🎓", "Health & Education Mastery", "Which nation leads in comprehensive human development?",
-        getHealthEducationAnswer(analysis), primaryBlue, "Development Leadership"),
-      ("🌲", "Environmental Impact", "Which country experienced the greatest forest area loss?",
-        getForestLossAnswer(analysis), accentRed, "Conservation Challenge")
-    )
-
-    val sectionHeader: Label = new Label("Analysis Results") {
-      font = Font.font("Segoe UI", FontWeight.Bold, 28)
-      textFill = Color.web(darkGray)
-      padding = Insets(0, 0, 20, 0)
-    }
-
-    val questionCards: List[VBox] = questions.zipWithIndex.map { case ((icon, title, question, answer, color, category), index) =>
-      createProfessionalQuestionCard(icon, title, question, answer, color, category, index + 1)
-    }
-
-    new VBox(25, sectionHeader +: questionCards: _*) {
-      alignment = Pos.Center
-      maxWidth = 900
-    }
-  }
-
-  private def createProfessionalQuestionCard(
-                                              icon: String,
-                                              title: String,
-                                              question: String,
-                                              answer: String,
-                                              color: String,
-                                              category: String,
-                                              number: Int
-                                            ): VBox = {
-
-    val headerSection: HBox = new HBox {
-      alignment = Pos.CenterLeft
-      spacing = 20
-      padding = Insets(0, 0, 15, 0)
-
-      children = Seq(
-        // Number badge
-        new Label(number.toString) {
-          minWidth = 50
-          minHeight = 50
-          alignment = Pos.Center
-          font = Font.font("Segoe UI", FontWeight.Bold, 20)
-          textFill = Color.White
-          style = s"""
-            -fx-background-radius: 25;
-            -fx-background-color: linear-gradient(to bottom right, $color, ${adjustBrightness(color, -20)});
-            -fx-effect: dropshadow(gaussian, #00000030, 6, 0.4, 0, 2);
-          """
-        },
-
-        new VBox {
-          spacing = 5
-          children = Seq(
-            new HBox {
-              spacing = 10
-              alignment = Pos.CenterLeft
-              children = Seq(
-                new Label(icon) {
-                  font = Font.font("Apple Color Emoji", 28)
-                },
-                new Label(title) {
-                  font = Font.font("Segoe UI", FontWeight.Bold, 20)
-                  textFill = Color.web(darkGray)
-                }
-              )
-            },
-            new Label(category) {
-              font = Font.font("Segoe UI", FontWeight.Normal, 12)
-              textFill = Color.web(color)
-              style = s"""
-                -fx-background-color: ${color}20;
-                -fx-background-radius: 10;
-                -fx-padding: 4 12 4 12;
-              """
-            }
-          )
-        }
-      )
-    }
-
-    val questionSection: Label = new Label(question) {
-      font = Font.font("Segoe UI", FontWeight.Normal, 16)
-      textFill = Color.web(neutralGray)
-      wrapText = true
-      padding = Insets(0, 0, 15, 0)
-    }
-
-    val answerSection: Label = new Label(answer) {
-      font = Font.font("Segoe UI", FontWeight.SemiBold, 16)
-      textFill = Color.web(color)
-      wrapText = true
-      style = s"""
-        -fx-background-color: ${color}15;
-        -fx-background-radius: 12;
-        -fx-padding: 16 20 16 20;
-        -fx-border-color: ${color}40;
-        -fx-border-width: 1;
-        -fx-border-radius: 12;
-      """
-    }
-
-    new VBox {
-      spacing = 0
-      padding = Insets(30)
-
-      style = s"""
-        -fx-background-color: $cardBackground;
-        -fx-background-radius: 16;
-        -fx-effect: dropshadow(gaussian, #00000020, 10, 0.3, 0, 3);
-        -fx-border-color: #e2e8f020;
-        -fx-border-width: 1;
-        -fx-border-radius: 16;
-      """
-
-      children = Seq(headerSection, questionSection, answerSection)
-
-      // Add sophisticated hover effect
-      onMouseEntered = (_: scalafx.scene.input.MouseEvent) => {
-        style = s"""
-          -fx-background-color: $cardBackground;
-          -fx-background-radius: 16;
-          -fx-effect: dropshadow(gaussian, #00000030, 15, 0.4, 0, 6);
-          -fx-border-color: ${color}60;
-          -fx-border-width: 2;
-          -fx-border-radius: 16;
-          -fx-scale-x: 1.02;
-          -fx-scale-y: 1.02;
-        """
-      }
-
-      onMouseExited = (_: scalafx.scene.input.MouseEvent) => {
-        style = s"""
-          -fx-background-color: $cardBackground;
-          -fx-background-radius: 16;
-          -fx-effect: dropshadow(gaussian, #00000020, 10, 0.3, 0, 3);
-          -fx-border-color: #e2e8f020;
-          -fx-border-width: 1;
-          -fx-border-radius: 16;
-          -fx-scale-x: 1.0;
-          -fx-scale-y: 1.0;
-        """
-      }
-    }
-  }
-
-  private def createFooterSection(): VBox = {
-    new VBox {
-      alignment = Pos.Center
-      padding = Insets(25, 0, 10, 0)
-      spacing = 10
-
-      children = Seq(
-        new Separator {
-          maxWidth = 800
-          style = s"-fx-background-color: $neutralGray;"
-        },
-        new Label("Professional Analytics Dashboard • Powered by ScalaFX") {
-          font = Font.font("Segoe UI", FontPosture.Italic, 12)
-          textFill = Color.web(neutralGray)
-        },
-        new Label("© 2024 Global Development Analytics Suite") {
-          font = Font.font("Segoe UI", FontWeight.Normal, 10)
-          textFill = Color.web("#94a3b8")
-        }
-      )
-    }
-  }
-
-  private def adjustBrightness(hexColor: String, percent: Double): String = {
-    val color = Color.web(hexColor)
-    val factor = 1 + (percent / 100.0)
-    val newRed = math.min(1.0, math.max(0.0, color.red * factor))
-    val newGreen = math.min(1.0, math.max(0.0, color.green * factor))
-    val newBlue = math.min(1.0, math.max(0.0, color.blue * factor))
-
-    f"#${(newRed * 255).toInt}%02x${(newGreen * 255).toInt}%02x${(newBlue * 255).toInt}%02x"
-  }
-
-  // Answer methods with enhanced formatting
   private def getLifeExpectancyAnswer(analysis: Analysis): String = {
     analysis.highestLifeExpectancy match {
       case Some((country, year)) =>
-        s"🏆 $country achieved peak life expectancy in $year, demonstrating exceptional healthcare quality and living standards."
+        s"$country achieved the highest life expectancy in $year, establishing itself as the global leader in healthcare excellence and quality of life standards."
       case None =>
-        "⚠️ Insufficient data available for comprehensive life expectancy analysis."
+        "Life expectancy data is currently unavailable for comprehensive analysis."
     }
   }
 
   private def getHealthEducationAnswer(analysis: Analysis): String = {
     analysis.topHealthAndEducationCountry match {
       case Some(country) =>
-        s"🌟 $country excels across all health and education indicators, representing the gold standard in comprehensive human development."
+        s"$country demonstrates exceptional performance across all health and education metrics, setting the global standard for comprehensive human development."
       case None =>
-        "⚠️ Unable to determine leader due to incomplete health and education data coverage."
+        "Health and education assessment data is insufficient for leadership determination."
     }
   }
 
   private def getForestLossAnswer(analysis: Analysis): String = {
     analysis.highestForestLoss match {
       case Some((country, loss)) =>
-        f"🔥 $country experienced the most significant environmental impact with $loss%.2f%% forest area reduction from 2000-2020."
+        f"$country experienced the most significant environmental transformation with $loss%.2f%% forest area reduction from 2000-2020, highlighting critical conservation challenges."
       case None =>
-        "⚠️ Forest area change data insufficient for comparative environmental impact analysis."
+        "Environmental change data is currently insufficient for forest impact analysis."
     }
   }
 }

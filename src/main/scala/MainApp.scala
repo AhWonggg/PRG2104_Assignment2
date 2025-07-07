@@ -1,37 +1,78 @@
 object MainApp extends App {
   val inputCsv = "src/main/resources/Global_Development_Indicators_2000_2020.csv"
   val outputTxt = "src/main/resources/output.txt"
-  
+
+  println("==========================================================")
+  println("   GLOBAL DEVELOPMENT ANALYTICS - ENTERPRISE PLATFORM")
+  println("==========================================================")
+  println()
+
   // Extract headers first
+  println("📄 Extracting data headers...")
   HeaderReader.extractHeader(inputCsv, outputTxt)
-  
+  println("✓ Headers extracted successfully")
+  println()
+
   // Load data and perform analysis
+  println("📊 Loading development data...")
   val data = Loader.loadData(inputCsv)
   val analysis = new Analysis(data)
+  println(f"✓ Loaded ${data.length}%,d records successfully")
+  println()
 
-  println("Global Development Data Analysis Results:")
-  println("==========================================\n")
+  println("🔍 EXECUTIVE ANALYSIS SUMMARY")
+  println("==========================================================")
+  println()
 
+  // Question 1: Life Expectancy
   analysis.highestLifeExpectancy match {
-    case Some((country, year)) => println(s"1) Country with highest life expectancy: $country in $year")
-    case None => println("1) No data for life expectancy.")
+    case Some((country, year)) =>
+      println(s"🏥 HEALTH EXCELLENCE:")
+      println(s"   → $country achieved peak life expectancy in $year")
+      println(s"   → Global benchmark for healthcare quality")
+    case None =>
+      println("🏥 HEALTH EXCELLENCE:")
+      println("   → Insufficient data for life expectancy analysis")
   }
+  println()
 
+  // Question 2: Health & Education
   analysis.topHealthAndEducationCountry match {
-    case Some(country) => println(s"2) Country with best health & education: $country")
-    case None => println("2) No valid data for health & education.")
+    case Some(country) =>
+      println(s"🎓 HUMAN DEVELOPMENT LEADERSHIP:")
+      println(s"   → $country excels in comprehensive development")
+      println(s"   → Gold standard for health & education integration")
+    case None =>
+      println("🎓 HUMAN DEVELOPMENT LEADERSHIP:")
+      println("   → Incomplete data for comprehensive analysis")
   }
+  println()
 
+  // Question 3: Forest Loss
   analysis.highestForestLoss match {
-    case Some((country, loss)) => println(f"3) Country with highest forest loss: $country lost $loss%.2f%%")
-    case None => println("3) No sufficient data for forest loss.")
+    case Some((country, loss)) =>
+      println(s"🌳 ENVIRONMENTAL IMPACT:")
+      println(f"   → $country: $loss%.2f%% forest area reduction (2000-2020)")
+      println(s"   → Critical conservation challenges identified")
+    case None =>
+      println("🌳 ENVIRONMENTAL IMPACT:")
+      println("   → Insufficient forest data for impact analysis")
   }
-  
-  println("\n==========================================")
-  println("Analysis completed successfully!")
-  
-  // Launch beautiful GUI after console output
-  println("\nLaunching Beautiful Modern GUI interface...")
+  println()
 
-  DevelopmentGUI.main(Array.empty)
+  println("==========================================================")
+  println("✓ Console analysis completed successfully!")
+  println("🚀 Launching Advanced Visual Intelligence Platform...")
+  println("==========================================================")
+  println()
+
+  // Small delay for dramatic effect
+  Thread.sleep(1500)
+
+  // Launch the dynamic visual GUI
+  DevelopmentGUI.launch()
+
+  println("📱 GUI Interface launched successfully!")
+  println("💡 Tip: Explore the interactive analysis cards for detailed insights")
+  println()
 }
