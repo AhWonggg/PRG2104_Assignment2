@@ -450,7 +450,6 @@ object DevelopmentGUI extends JFXApp3 {
     }
   }
 
-  // Helper method to adjust color brightness
   private def adjustBrightness(hexColor: String, percent: Double): String = {
     val color = Color.web(hexColor)
     val factor = 1 + (percent / 100.0)
