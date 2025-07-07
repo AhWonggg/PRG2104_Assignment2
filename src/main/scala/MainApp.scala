@@ -65,14 +65,11 @@ object MainApp extends App {
   println("🚀 Launching Advanced Visual Intelligence Platform...")
   println("==========================================================")
   println()
-
-  // Small delay for dramatic effect
+  
   Thread.sleep(1500)
-
-  // Launch the dynamic visual GUI
+  
   DevelopmentGUI.launch()
 
   println("📱 GUI Interface launched successfully!")
-  println("💡 Tip: Explore the interactive analysis cards for detailed insights")
   println()
 }
