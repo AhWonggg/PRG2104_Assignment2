@@ -32,7 +32,6 @@ object MainApp extends App {
   
   // Launch beautiful GUI after console output
   println("\nLaunching Beautiful Modern GUI interface...")
-  
-  // 启动ScalaFX美观GUI
+
   DevelopmentGUI.main(Array.empty)
 }

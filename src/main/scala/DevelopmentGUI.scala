@@ -165,7 +165,6 @@ object DevelopmentGUI extends JFXApp3 {
         }
       )
 
-      // Add hover effect
       onMouseEntered = (_: scalafx.scene.input.MouseEvent) => {
         style = s"""
           -fx-background-color: $cardBackground;
