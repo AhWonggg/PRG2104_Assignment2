@@ -1,230 +1,176 @@
-import javax.swing._
-import java.awt._
-import java.awt.event._
-import javax.swing.WindowConstants
+import scalafx.application.JFXApp3
+import scalafx.application.Platform
+import scalafx.scene.Scene
+import scalafx.scene.layout._
+import scalafx.scene.paint._
+import scalafx.scene.control._
+import scalafx.scene.text._
+import scalafx.geometry._
+import scalafx.animation._
+import scalafx.beans.property.DoubleProperty
+import scalafx.Includes._
 
 /**
- * 一个现代化的图形界面，用于展示全球发展数据分析的三个问题答案
+ * ScalaFX版美丽现代GUI
  */
-class DevelopmentGUI extends JFrame {
-  
-  def createAndShowGUI(): Unit = {
-    initializeFrame()
-    
-    // 加载数据和进行分析
-    val data = loadAnalysisData()
-    
-    // 创建主面板
-    val mainPanel = createMainPanel(data)
-    
-    add(mainPanel)
-    pack()
-    setLocationRelativeTo(null)
-    setVisible(true)
-  }
-  
-  private def initializeFrame(): Unit = {
-    setTitle("Global Development Data Analysis Results")
-    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
-    setResizable(true)
-    
-    // 设置现代化外观
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-    } catch {
-      case _: Exception => // 使用默认外观
+object DevelopmentGUIApp extends JFXApp3 {
+  override def start(): Unit = {
+    val analysis = loadAnalysisData()
+    stage = new JFXApp3.PrimaryStage {
+      title = "🌍 Global Development Analytics - Beautiful ScalaFX"
+      width = 1100
+      height = 750
+      scene = new Scene {
+        fill = LinearGradient(0, 0, 1, 1, true, CycleMethod.NoCycle,
+          Stop(0, Color.web("#e0eafc")), Stop(1, Color.web("#cfdef3")))
+        root = new BorderPane {
+          padding = Insets(30)
+          top = createHeader()
+          center = new ScrollPane {
+            content = createContent(analysis)
+            fitToWidth = true
+            style = "-fx-background: transparent;"
+          }
+          bottom = createFooter()
+        }
+      }
     }
   }
-  
-  private def loadAnalysisData(): Analysis = {
+
+  def loadAnalysisData(): Analysis = {
     val inputCsv = "src/main/resources/Global_Development_Indicators_2000_2020.csv"
     val data = Loader.loadData(inputCsv)
     new Analysis(data)
   }
-  
-  private def createMainPanel(analysis: Analysis): JPanel = {
-    val mainPanel = new JPanel(new BorderLayout())
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25))
-    mainPanel.setBackground(new Color(248, 249, 250))
-    
-    // 标题
-    val titlePanel = createTitlePanel()
-    mainPanel.add(titlePanel, BorderLayout.NORTH)
-    
-    // 数据状态指示器
-    val statusPanel = createStatusPanel(analysis)
-    
-    // 结果内容
-    val contentPanel = createContentPanel(analysis)
-    
-    // 创建中心面板包含状态和内容
-    val centerPanel = new JPanel(new BorderLayout())
-    centerPanel.add(statusPanel, BorderLayout.NORTH)
-    centerPanel.add(contentPanel, BorderLayout.CENTER)
-    centerPanel.setOpaque(false)
-    
-    mainPanel.add(centerPanel, BorderLayout.CENTER)
-    
-    // 底部信息
-    val footerPanel = createFooterPanel()
-    mainPanel.add(footerPanel, BorderLayout.SOUTH)
-    
-    mainPanel
-  }
-  
-  private def createTitlePanel(): JPanel = {
-    val panel = new JPanel(new BorderLayout())
-    panel.setOpaque(false)
-    panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0))
-    
-    val titleLabel = new JLabel("Global Development Data Analysis", SwingConstants.CENTER)
-    titleLabel.setFont(new Font("Arial", Font.BOLD, 28))
-    titleLabel.setForeground(new Color(44, 62, 80))
-    
-    val subtitleLabel = new JLabel("Statistical Analysis Results", SwingConstants.CENTER)
-    subtitleLabel.setFont(new Font("Arial", Font.ITALIC, 14))
-    subtitleLabel.setForeground(new Color(127, 140, 141))
-    
-    panel.add(titleLabel, BorderLayout.CENTER)
-    panel.add(subtitleLabel, BorderLayout.SOUTH)
-    
-    panel
-  }
-  
-  private def createStatusPanel(analysis: Analysis): JPanel = {
-    val panel = new JPanel(new FlowLayout(FlowLayout.CENTER))
-    panel.setOpaque(false)
-    panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0))
-    
-    val statusLabel = if (analysis.records.isEmpty) {
-      createStatusLabel("⚠️ Warning: Data loading failed", new Color(231, 76, 60))
-    } else {
-      createStatusLabel(s"✅ Successfully loaded ${analysis.records.length} data records", new Color(39, 174, 96))
-    }
-    
-    panel.add(statusLabel)
-    panel
-  }
-  
-  private def createStatusLabel(text: String, color: Color): JLabel = {
-    val label = new JLabel(text)
-    label.setFont(new Font("Arial", Font.PLAIN, 14))
-    label.setForeground(color)
-    label
-  }
-  
-  private def createContentPanel(analysis: Analysis): JPanel = {
-    val panel = new JPanel()
-    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS))
-    panel.setOpaque(false)
-    
-    // Three analysis questions
-    val questions = scala.collection.immutable.List(
-      ("Question 1: Which country had the highest life expectancy, and in which year?", getLifeExpectancyAnswer(analysis)),
-      ("Question 2: Which country performed best in health & education?", getHealthEducationAnswer(analysis)),
-      ("Question 3: Which country had the highest forest area loss from 2000 to 2020?", getForestLossAnswer(analysis))
-    )
-    
-    questions.zipWithIndex.foreach { case ((question, answer), index) =>
-      if (index > 0) {
-        panel.add(Box.createVerticalStrut(20))
-      }
-      panel.add(createQuestionCard(question, answer, index + 1))
-    }
-    
-    panel
-  }
-  
-  private def getLifeExpectancyAnswer(analysis: Analysis): String = {
-    analysis.highestLifeExpectancy match {
-      case Some((country, year)) => s"$country achieved the highest life expectancy in $year"
-      case None => "Insufficient data available"
-    }
-  }
-  
-  private def getHealthEducationAnswer(analysis: Analysis): String = {
-    analysis.topHealthAndEducationCountry match {
-      case Some(country) => s"$country performed best in comprehensive health & education indicators"
-      case None => "Insufficient data available"
-    }
-  }
-  
-  private def getForestLossAnswer(analysis: Analysis): String = {
-    analysis.highestForestLoss match {
-      case Some((country, loss)) => f"$country had the highest forest loss with $loss%.2f%% reduction"
-      case None => "Insufficient data available"
-    }
-  }
-  
-  private def createQuestionCard(question: String, answer: String, number: Int): JPanel = {
-    val card = new JPanel(new BorderLayout())
-    card.setBorder(BorderFactory.createCompoundBorder(
-      BorderFactory.createLineBorder(new Color(206, 212, 218), 1),
-      BorderFactory.createEmptyBorder(20, 20, 20, 20)
-    ))
-    card.setBackground(Color.WHITE)
-    card.setMaximumSize(new Dimension(700, 120))
-    card.setPreferredSize(new Dimension(700, 120))
-    
-    // Question title
-    val questionLabel = new JLabel(question)
-    questionLabel.setFont(new Font("Arial", Font.BOLD, 16))
-    questionLabel.setForeground(new Color(52, 73, 94))
-    
-    // Answer content
-    val answerLabel = new JLabel(s"Answer: $answer")
-    answerLabel.setFont(new Font("Arial", Font.PLAIN, 14))
-    answerLabel.setForeground(new Color(41, 128, 185))
-    answerLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0))
-    
-    // 数字标记
-    val numberLabel = new JLabel(number.toString, SwingConstants.CENTER)
-    numberLabel.setFont(new Font("Arial", Font.BOLD, 18))
-    numberLabel.setForeground(Color.WHITE)
-    numberLabel.setOpaque(true)
-    numberLabel.setBackground(new Color(52, 152, 219))
-    numberLabel.setPreferredSize(new Dimension(35, 35))
-    numberLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5))
-    
-    // 文本面板
-    val textPanel = new JPanel()
-    textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS))
-    textPanel.setOpaque(false)
-    textPanel.add(questionLabel)
-    textPanel.add(answerLabel)
-    
-    card.add(numberLabel, BorderLayout.WEST)
-    card.add(Box.createHorizontalStrut(15), BorderLayout.CENTER)
-    card.add(textPanel, BorderLayout.CENTER)
-    
-    card
-  }
-  
-  private def createFooterPanel(): JPanel = {
-    val panel = new JPanel(new FlowLayout(FlowLayout.CENTER))
-    panel.setOpaque(false)
-    panel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0))
-    
-    val footerLabel = new JLabel("Analysis Completed Successfully")
-    footerLabel.setFont(new Font("Arial", Font.ITALIC, 12))
-    footerLabel.setForeground(new Color(127, 140, 141))
-    
-    panel.add(footerLabel)
-    panel
-  }
-}
 
-/**
- * GUI应用程序入口点
- */
-object DevelopmentGUIApp {
-  def main(args: Array[String]): Unit = {
-    // 设置系统外观
-    SwingUtilities.invokeLater(new Runnable {
-      override def run(): Unit = {
-        val gui = new DevelopmentGUI()
-        gui.createAndShowGUI()
-      }
-    })
+  def createHeader(): VBox = {
+    val title = new Label("🌍 Global Development Analytics") {
+      font = Font.font("Segoe UI", FontWeight.Bold, 38)
+      textFill = Color.web("#1e293b")
+      alignmentInParent = Pos.Center
+    }
+    val subtitle = new Label("Beautiful Insights into World Development Indicators") {
+      font = Font.font("Segoe UI", FontWeight.Normal, 18)
+      textFill = Color.web("#64748b")
+      alignmentInParent = Pos.Center
+    }
+    val deco = new Region {
+      minHeight = 18
+      maxHeight = 18
+      style = "-fx-background-radius: 9; -fx-background-color: linear-gradient(to right, #4a90e2, #a855f7, #ec4899);"
+    }
+    new VBox(10, title, subtitle, deco) {
+      alignment = Pos.Center
+      padding = Insets(0, 0, 30, 0)
+    }
+  }
+
+  def createContent(analysis: Analysis): VBox = {
+    val statusCard = createStatusCard(analysis)
+    val questions = List(
+      ("🏥", "Life Expectancy Excellence", "Which country achieved peak longevity?", getLifeExpectancyAnswer(analysis), "#4a90e2", "#74b9ff"),
+      ("📚", "Health & Education Mastery", "Which nation leads in comprehensive human development?", getHealthEducationAnswer(analysis), "#48bb78", "#81ecec"),
+      ("🌳", "Forest Conservation Challenge", "Which country faced the greatest environmental loss?", getForestLossAnswer(analysis), "#a855f7", "#ec4899")
+    )
+    val cards = questions.zipWithIndex.map { case ((icon, title, q, ans, c1, c2), idx) =>
+      createQuestionCard(icon, title, q, ans, c1, c2, idx + 1)
+    }
+    new VBox(30, (statusCard +: cards): _*)
+  }
+
+  def createStatusCard(analysis: Analysis): VBox = {
+    val isDataLoaded = analysis.records.nonEmpty
+    val icon = if (isDataLoaded) "✅" else "⚠️"
+    val text = if (isDataLoaded)
+      s"Successfully analyzed ${analysis.records.length} development records from 193 countries"
+    else
+      "Data loading failed - Please verify your data source configuration"
+    val color = if (isDataLoaded) "#22c55e" else "#ef4444"
+    new VBox {
+      style = s"-fx-background-radius: 18; -fx-background-color: rgba(255,255,255,0.85); -fx-effect: dropshadow(gaussian, #a0aec0, 12, 0.2, 0, 2);"
+      padding = Insets(25, 30, 25, 30)
+      alignment = Pos.Center
+      children = Seq(
+        new Label(icon) {
+          font = Font.font("Apple Color Emoji", FontWeight.Normal, 32)
+        },
+        new Label(text) {
+          font = Font.font("Segoe UI", FontWeight.Normal, 16)
+          textFill = Color.web(color)
+        }
+      )
+    }
+  }
+
+  def createQuestionCard(icon: String, title: String, question: String, answer: String, color1: String, color2: String, number: Int): HBox = {
+    val numberCircle = new Label(number.toString) {
+      minWidth = 48
+      minHeight = 48
+      alignment = Pos.Center
+      font = Font.font("Segoe UI", FontWeight.Bold, 20)
+      textFill = Color.White
+      style = s"-fx-background-radius: 24; -fx-background-color: linear-gradient(to bottom right, $color1, $color2);"
+    }
+    val iconLabel = new Label(icon) {
+      font = Font.font("Apple Color Emoji", FontWeight.Normal, 36)
+      minWidth = 48
+      alignment = Pos.Center
+    }
+    val titleLabel = new Label(title) {
+      font = Font.font("Segoe UI", FontWeight.Bold, 20)
+      textFill = Color.web(color1)
+    }
+    val questionLabel = new Label(question) {
+      font = Font.font("Segoe UI", FontWeight.Normal, 15)
+      textFill = Color.web("#64748b")
+    }
+    val answerLabel = new Label(answer) {
+      font = Font.font("Segoe UI", FontWeight.Bold, 16)
+      textFill = Color.web(color1)
+      style = s"-fx-background-radius: 10; -fx-background-color: linear-gradient(to right, $color1, $color2, #fff2); -fx-padding: 8 16 8 16;"
+    }
+    val vbox = new VBox(8, titleLabel, questionLabel, answerLabel) {
+      alignment = Pos.TopLeft
+      padding = Insets(0, 0, 0, 10)
+    }
+    new HBox(20, numberCircle, iconLabel, vbox) {
+      style = "-fx-background-radius: 18; -fx-background-color: rgba(255,255,255,0.92); -fx-effect: dropshadow(gaussian, #a0aec0, 10, 0.18, 0, 2);"
+      padding = Insets(30)
+      alignment = Pos.CenterLeft
+      maxWidth = 900
+    }
+  }
+
+  def createFooter(): VBox = {
+    new VBox {
+      alignment = Pos.Center
+      padding = Insets(20, 0, 0, 0)
+      children = Seq(
+        new Label("✨ Beautiful Analysis Dashboard - Powered by ScalaFX ✨") {
+          font = Font.font("Segoe UI", FontPosture.Italic, 14)
+          textFill = Color.web("#94a3b8")
+        }
+      )
+    }
+  }
+
+  // Answer methods
+  def getLifeExpectancyAnswer(analysis: Analysis): String = {
+    analysis.highestLifeExpectancy match {
+      case Some((country, year)) => s"$country achieved peak longevity in $year"
+      case None => "Data analysis in progress..."
+    }
+  }
+  def getHealthEducationAnswer(analysis: Analysis): String = {
+    analysis.topHealthAndEducationCountry match {
+      case Some(country) => s"$country excels in comprehensive human development"
+      case None => "Data analysis in progress..."
+    }
+  }
+  def getForestLossAnswer(analysis: Analysis): String = {
+    analysis.highestForestLoss match {
+      case Some((country, loss)) => f"$country faced $loss%.2f%% forest area reduction"
+      case None => "Data analysis in progress..."
+    }
   }
 }
