@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6588263e-0e30-4dac-90ca-80dda75409b6" name="Changes" comment="changed GUI">
+    <list default="true" id="6588263e-0e30-4dac-90ca-80dda75409b6" name="Changes" comment="updated GUI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/DevelopmentGUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/DevelopmentGUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/MainApp.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/MainApp.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp$.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.tasty" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.tasty" afterDir="false" />
     </list>
@@ -162,7 +160,7 @@
       <workItem from="1751438103524" duration="377000" />
       <workItem from="1751438519782" duration="1306000" />
       <workItem from="1751881569489" duration="766000" />
-      <workItem from="1751890433318" duration="12749000" />
+      <workItem from="1751890433318" duration="13946000" />
     </task>
     <task id="LOCAL-00001" summary="updated Development GUI">
       <option name="closed" value="true" />
@@ -220,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751907003682</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="updated GUI">
+      <option name="closed" value="true" />
+      <created>1751909846029</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1751909846029</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,6 +258,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="updated Development GUI" />
     <MESSAGE value="changed GUI" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed GUI" />
+    <MESSAGE value="updated GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated GUI" />
   </component>
 </project>
