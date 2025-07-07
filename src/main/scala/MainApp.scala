@@ -34,5 +34,5 @@ object MainApp extends App {
   println("\nLaunching Beautiful Modern GUI interface...")
   
   // 启动ScalaFX美观GUI
-  DevelopmentGUIApp.main(Array.empty)
+  DevelopmentGUI.main(Array.empty)
 }
