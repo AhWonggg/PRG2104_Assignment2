@@ -65,9 +65,9 @@ object MainApp extends App {
   println("🚀 Launching Advanced Visual Intelligence Platform...")
   println("==========================================================")
   println()
-  
+
   Thread.sleep(1500)
-  
+
   DevelopmentGUI.launch()
 
   println("📱 GUI Interface launched successfully!")

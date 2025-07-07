@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6588263e-0e30-4dac-90ca-80dda75409b6" name="Changes" comment="changed GUI">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/DevelopmentGUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/DevelopmentGUI.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/MainApp.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/MainApp.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.tasty" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-3.3.6/classes/MainApp.tasty" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +162,7 @@
       <workItem from="1751438103524" duration="377000" />
       <workItem from="1751438519782" duration="1306000" />
       <workItem from="1751881569489" duration="766000" />
-      <workItem from="1751890433318" duration="9842000" />
+      <workItem from="1751890433318" duration="12749000" />
     </task>
     <task id="LOCAL-00001" summary="updated Development GUI">
       <option name="closed" value="true" />
@@ -199,7 +204,23 @@
       <option name="project" value="LOCAL" />
       <updated>1751906415384</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="changed GUI">
+      <option name="closed" value="true" />
+      <created>1751906974294</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1751906974294</updated>
+    </task>
+    <task id="LOCAL-00007" summary="changed GUI">
+      <option name="closed" value="true" />
+      <created>1751907003682</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1751907003682</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
