@@ -1,9 +1,6 @@
 import java.awt._
 import javax.swing._
 
-/**
- * Enhanced Modern Dashboard GUI with refactored code to eliminate duplication
- */
 object DevelopmentGUI {
 
   // Enhanced modern color palette

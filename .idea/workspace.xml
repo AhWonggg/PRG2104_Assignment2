@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6588263e-0e30-4dac-90ca-80dda75409b6" name="Changes" comment="added new design for analysis report">
+    <list default="true" id="6588263e-0e30-4dac-90ca-80dda75409b6" name="Changes" comment="smoothen background">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/DevelopmentGUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/DevelopmentGUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/DevelopmentUIApplication$.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/DevelopmentUIApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-3.3.6/classes/DevelopmentUIApplication.tasty" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +159,7 @@
       <workItem from="1751438519782" duration="1306000" />
       <workItem from="1751881569489" duration="766000" />
       <workItem from="1751890433318" duration="14145000" />
-      <workItem from="1751959424344" duration="4949000" />
+      <workItem from="1751959424344" duration="6326000" />
     </task>
     <task id="LOCAL-00001" summary="updated Development GUI">
       <option name="closed" value="true" />
@@ -252,7 +249,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751972442893</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="smoothen background">
+      <option name="closed" value="true" />
+      <created>1751974994685</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1751974994685</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -288,6 +293,7 @@
     <MESSAGE value="fixed bugs - GUI" />
     <MESSAGE value="changed emoji and fixed layout" />
     <MESSAGE value="added new design for analysis report" />
-    <option name="LAST_COMMIT_MESSAGE" value="added new design for analysis report" />
+    <MESSAGE value="smoothen background" />
+    <option name="LAST_COMMIT_MESSAGE" value="smoothen background" />
   </component>
 </project>
