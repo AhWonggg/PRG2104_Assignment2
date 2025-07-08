@@ -182,20 +182,20 @@ object DevelopmentGUI {
     ))
 
     // Icon section - using JLabel for better emoji support
-    val iconSection = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20))
+    val iconSection = new JPanel(new BorderLayout())
     iconSection.setBackground(Color.WHITE)
     iconSection.setPreferredSize(new Dimension(80, 70))
 
-    val emojiLabel = new JLabel(emoji)
-    emojiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28))
+    val emojiLabel = new JLabel(emoji, SwingConstants.CENTER)
+    emojiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24))
     emojiLabel.setHorizontalAlignment(SwingConstants.CENTER)
     emojiLabel.setVerticalAlignment(SwingConstants.CENTER)
     emojiLabel.setOpaque(true)
     emojiLabel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 30))
-    emojiLabel.setPreferredSize(new Dimension(60, 50))
-    emojiLabel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15))
+    emojiLabel.setPreferredSize(new Dimension(70, 50))
+    emojiLabel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8))
 
-    iconSection.add(emojiLabel)
+    iconSection.add(emojiLabel, BorderLayout.CENTER)
 
     // Content section
     val contentPanel = new JPanel()
@@ -305,9 +305,9 @@ object DevelopmentGUI {
         val g2 = g.asInstanceOf[Graphics2D]
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         g2.setColor(new Color(34, 197, 94, 20))
-        g2.fillRoundRect(0, 5, getWidth, 3, 2, 2)
+        g2.fillRoundRect(0, 5, getWidth(), 3, 2, 2)
         g2.setColor(successGreen)
-        g2.fillRoundRect(0, 5, (getWidth * 0.95).toInt, 3, 2, 2)
+        g2.fillRoundRect(0, 5, (getWidth() * 0.95).toInt, 3, 2, 2)
       }
     }
     progressPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 15))
@@ -366,135 +366,215 @@ object DevelopmentGUI {
   private def createAnalysisCard(number: String, title: String, category: String,
                                  question: String, answer: String, accentColor: Color, emoji: String): JPanel = {
     val card = new JPanel(new BorderLayout())
-    card.setBackground(Color.WHITE)
+    card.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
     card.setBorder(BorderFactory.createCompoundBorder(
-      BorderFactory.createLineBorder(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 100), 2),
-      BorderFactory.createEmptyBorder(30, 35, 30, 35)
+      BorderFactory.createLineBorder(accentColor, 3),
+      BorderFactory.createEmptyBorder(35, 40, 35, 40)
     ))
-    card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 180))
+    card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200))
 
     val leftPanel = new JPanel(new BorderLayout())
-    leftPanel.setBackground(Color.WHITE)
+    leftPanel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
 
-    // Top section with vibrant number, emoji, and title
+    // Top section with enhanced colorful design
     val topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0))
-    topPanel.setBackground(Color.WHITE)
+    topPanel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
 
-    // Circular number badge with solid color (no gradient to avoid color range issues)
+    // Enhanced number badge with multiple visual layers
     val numberBadge = new JPanel() {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
         val g2 = g.asInstanceOf[Graphics2D]
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+        // Outer glow effect
+        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 40))
+        g2.fillOval(-2, -2, 58, 58)
+
+        // Main circle with vibrant color
         g2.setColor(accentColor)
-        g2.fillOval(0, 0, 50, 50)
-        g2.setColor(new Color(0, 0, 0, 20))
-        g2.drawOval(2, 2, 46, 46)
-        g2.setColor(Color.WHITE)
-        g2.setFont(new Font("Arial", Font.BOLD, 18))
+        g2.fillOval(2, 2, 50, 50)
+
+        // Inner highlight
+        g2.setColor(new Color(255, 255, 255, 60))
+        g2.fillOval(8, 8, 38, 38)
+
+        // Inner shadow for depth
+        g2.setColor(new Color(0, 0, 0, 30))
+        g2.fillOval(12, 12, 30, 30)
+
+        // Number text with shadow
+        g2.setColor(new Color(0, 0, 0, 40))
+        g2.setFont(new Font("Arial", Font.BOLD, 20))
         val fm = g2.getFontMetrics
-        val x = (50 - fm.stringWidth(number)) / 2
-        val y = ((50 - fm.getHeight) / 2) + fm.getAscent
+        val x = (54 - fm.stringWidth(number)) / 2
+        val y = ((54 - fm.getHeight) / 2) + fm.getAscent + 1
+        g2.drawString(number, x + 1, y + 1)
+
+        // Number text
+        g2.setColor(Color.WHITE)
         g2.drawString(number, x, y)
       }
     }
-    numberBadge.setPreferredSize(new Dimension(50, 50))
-    numberBadge.setBackground(Color.WHITE)
+    numberBadge.setPreferredSize(new Dimension(54, 54))
+    numberBadge.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
 
-    // Emoji with vibrant background
+    // Enhanced emoji with multiple colorful layers
     val emojiPanel = new JPanel() {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
         val g2 = g.asInstanceOf[Graphics2D]
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 40))
-        g2.fillOval(0, 0, 50, 50)
-        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 80))
-        g2.fillOval(8, 8, 34, 34)
-        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22))
+
+        // Outer colorful ring
+        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 60))
+        g2.fillOval(0, 0, 54, 54)
+
+        // Middle ring with different opacity
+        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 120))
+        g2.fillOval(6, 6, 42, 42)
+
+        // Inner circle
+        g2.setColor(new Color(255, 255, 255, 180))
+        g2.fillOval(12, 12, 30, 30)
+
+        // Highlight effect
+        g2.setColor(new Color(255, 255, 255, 100))
+        g2.fillOval(15, 15, 12, 12)
+
+        // Emoji
+        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24))
         val fm = g2.getFontMetrics
-        val x = (50 - fm.stringWidth(emoji)) / 2
-        val y = ((50 - fm.getHeight) / 2) + fm.getAscent
+        val x = (54 - fm.stringWidth(emoji)) / 2
+        val y = ((54 - fm.getHeight) / 2) + fm.getAscent
         g2.drawString(emoji, x, y)
       }
     }
-    emojiPanel.setPreferredSize(new Dimension(50, 50))
-    emojiPanel.setBackground(Color.WHITE)
+    emojiPanel.setPreferredSize(new Dimension(54, 54))
+    emojiPanel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
 
     val titleLabel = new JLabel(title)
-    titleLabel.setFont(new Font("Arial", Font.BOLD, 24))
-    titleLabel.setForeground(textPrimary)
-    titleLabel.setBorder(BorderFactory.createEmptyBorder(12, 20, 0, 0))
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 26))
+    titleLabel.setForeground(new Color(
+      Math.max(0, Math.min(255, accentColor.getRed - 30)),
+      Math.max(0, Math.min(255, accentColor.getGreen - 30)),
+      Math.max(0, Math.min(255, accentColor.getBlue - 30))
+    ))
+    titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 25, 0, 0))
 
     topPanel.add(numberBadge)
-    topPanel.add(Box.createHorizontalStrut(15))
+    topPanel.add(Box.createHorizontalStrut(20))
     topPanel.add(emojiPanel)
     topPanel.add(titleLabel)
 
-    // Middle section with question
+    // Middle section with enhanced styling
     val middlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0))
-    middlePanel.setBackground(Color.WHITE)
-    middlePanel.setBorder(BorderFactory.createEmptyBorder(15, 65, 0, 0))
+    middlePanel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
+    middlePanel.setBorder(BorderFactory.createEmptyBorder(18, 75, 0, 0))
 
     val questionLabel = new JLabel(question)
-    questionLabel.setFont(new Font("Arial", Font.PLAIN, 16))
-    questionLabel.setForeground(textSecondary)
+    questionLabel.setFont(new Font("Arial", Font.PLAIN, 17))
+    questionLabel.setForeground(new Color(60, 60, 60))
 
     middlePanel.add(questionLabel)
 
-    // Bottom section with vibrant answer
+    // Bottom section with colorful answer
     val bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0))
-    bottomPanel.setBackground(Color.WHITE)
-    bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 65, 0, 0))
+    bottomPanel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
+    bottomPanel.setBorder(BorderFactory.createEmptyBorder(12, 75, 0, 0))
 
     val answerLabel = new JLabel(answer)
-    answerLabel.setFont(new Font("Arial", Font.BOLD, 15))
+    answerLabel.setFont(new Font("Arial", Font.BOLD, 16))
     answerLabel.setForeground(accentColor)
 
     bottomPanel.add(answerLabel)
 
-    // Vibrant progress bar
+    // Enhanced colorful progress bar with multiple effects
     val progressPanel = new JPanel() {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
         val g2 = g.asInstanceOf[Graphics2D]
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 25))
-        g2.fillRoundRect(65, 8, 400, 5, 3, 3)
+
+        // Background track with shadow
+        g2.setColor(new Color(0, 0, 0, 20))
+        g2.fillRoundRect(76, 12, 420, 8, 4, 4)
+
+        // Background track
+        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 30))
+        g2.fillRoundRect(75, 10, 420, 8, 4, 4)
+
+        // Main progress bar with vibrant color
         g2.setColor(accentColor)
-        g2.fillRoundRect(65, 8, 320, 5, 3, 3)
-        g2.setColor(new Color(255, 255, 255, 100))
-        g2.fillRoundRect(65, 8, 320, 2, 2, 2)
+        g2.fillRoundRect(75, 10, 340, 8, 4, 4)
+
+        // Inner highlight for 3D effect
+        g2.setColor(new Color(255, 255, 255, 120))
+        g2.fillRoundRect(75, 10, 340, 3, 2, 2)
+
+        // Animated dots effect (static but colorful)
+        for (i <- 0 until 8) {
+          val dotX = 85 + (i * 40)
+          g2.setColor(new Color(255, 255, 255, 80 - (i * 10)))
+          g2.fillOval(dotX, 12, 4, 4)
+        }
       }
     }
-    progressPanel.setPreferredSize(new Dimension(500, 25))
-    progressPanel.setBackground(Color.WHITE)
+    progressPanel.setPreferredSize(new Dimension(520, 30))
+    progressPanel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
 
     leftPanel.add(topPanel, BorderLayout.NORTH)
     leftPanel.add(middlePanel, BorderLayout.CENTER)
     leftPanel.add(bottomPanel, BorderLayout.SOUTH)
 
     val bottomContainer = new JPanel(new BorderLayout())
-    bottomContainer.setBackground(Color.WHITE)
+    bottomContainer.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
     bottomContainer.add(progressPanel, BorderLayout.SOUTH)
 
-    // Enhanced vibrant category badge
-    val categoryBadge = new JLabel(category)
-    categoryBadge.setFont(new Font("Arial", Font.BOLD, 13))
-    categoryBadge.setForeground(Color.WHITE)
-    categoryBadge.setOpaque(true)
-    categoryBadge.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 200))
-    categoryBadge.setBorder(BorderFactory.createCompoundBorder(
-      BorderFactory.createLineBorder(accentColor, 2),
-      BorderFactory.createEmptyBorder(12, 20, 12, 20)
-    ))
+    // Enhanced vibrant category badge with multiple effects
+    val categoryBadge = new JPanel() {
+      override def paintComponent(g: Graphics): Unit = {
+        super.paintComponent(g)
+        val g2 = g.asInstanceOf[Graphics2D]
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 
-    val rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT))
-    rightPanel.setBackground(Color.WHITE)
+        // Shadow effect
+        g2.setColor(new Color(0, 0, 0, 30))
+        g2.fillRoundRect(2, 2, getWidth() - 2, getHeight() - 2, 12, 12)
+
+        // Main background with vibrant color
+        g2.setColor(accentColor)
+        g2.fillRoundRect(0, 0, getWidth() - 2, getHeight() - 2, 12, 12)
+
+        // Top highlight
+        g2.setColor(new Color(255, 255, 255, 60))
+        g2.fillRoundRect(2, 2, getWidth() - 6, (getHeight() - 6) / 2, 10, 10)
+
+        // Text with shadow
+        g2.setFont(new Font("Arial", Font.BOLD, 14))
+        val fm = g2.getFontMetrics
+        val textWidth = fm.stringWidth(category)
+        val x = (getWidth() - textWidth) / 2
+        val y = ((getHeight() - fm.getHeight) / 2) + fm.getAscent
+
+        // Text shadow
+        g2.setColor(new Color(0, 0, 0, 60))
+        g2.drawString(category, x + 1, y + 1)
+
+        // Main text
+        g2.setColor(Color.WHITE)
+        g2.drawString(category, x, y)
+      }
+    }
+    categoryBadge.setPreferredSize(new Dimension(180, 45))
+    categoryBadge.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
+
+    val rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 10))
+    rightPanel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
     rightPanel.add(categoryBadge)
 
     val mainContainer = new JPanel(new BorderLayout())
-    mainContainer.setBackground(Color.WHITE)
+    mainContainer.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
     mainContainer.add(leftPanel, BorderLayout.CENTER)
     mainContainer.add(rightPanel, BorderLayout.EAST)
     mainContainer.add(bottomContainer, BorderLayout.SOUTH)
