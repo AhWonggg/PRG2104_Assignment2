@@ -17,6 +17,11 @@ object DevelopmentGUI {
   private val borderColor = new Color(229, 231, 235)
   private val successGreen = new Color(34, 197, 94)
 
+  // Vibrant colors for analysis cards
+  private val vibrantGreen = new Color(16, 185, 129)
+  private val vibrantBlue = new Color(59, 130, 246)
+  private val vibrantRed = new Color(239, 68, 68)
+
   def launch(): Unit = {
     SwingUtilities.invokeLater(() => createModernDashboard())
   }
@@ -176,24 +181,21 @@ object DevelopmentGUI {
       BorderFactory.createEmptyBorder(25, 20, 25, 20)
     ))
 
-    // Icon section
-    val iconSection = new JPanel() {
-      override def paintComponent(g: Graphics): Unit = {
-        super.paintComponent(g)
-        val g2 = g.asInstanceOf[Graphics2D]
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 30))
-        g2.fillRoundRect(15, 5, 50, 40, 8, 8)
-        g2.setColor(accentColor)
-        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20))
-        val fm = g2.getFontMetrics
-        val x = (80 - fm.stringWidth(emoji)) / 2
-        val y = ((50 - fm.getHeight) / 2) + fm.getAscent
-        g2.drawString(emoji, x, y)
-      }
-    }
-    iconSection.setPreferredSize(new Dimension(80, 50))
+    // Icon section - using JLabel for better emoji support
+    val iconSection = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20))
     iconSection.setBackground(Color.WHITE)
+    iconSection.setPreferredSize(new Dimension(80, 70))
+
+    val emojiLabel = new JLabel(emoji)
+    emojiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28))
+    emojiLabel.setHorizontalAlignment(SwingConstants.CENTER)
+    emojiLabel.setVerticalAlignment(SwingConstants.CENTER)
+    emojiLabel.setOpaque(true)
+    emojiLabel.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 30))
+    emojiLabel.setPreferredSize(new Dimension(60, 50))
+    emojiLabel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15))
+
+    iconSection.add(emojiLabel)
 
     // Content section
     val contentPanel = new JPanel()
@@ -245,7 +247,7 @@ object DevelopmentGUI {
       BorderFactory.createLineBorder(borderColor, 1),
       BorderFactory.createEmptyBorder(25, 30, 25, 30)
     ))
-    statusCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150)) // Increased height
+    statusCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150))
     statusCard.setMinimumSize(new Dimension(400, 150))
     statusCard.setPreferredSize(new Dimension(1200, 150))
 
@@ -291,7 +293,7 @@ object DevelopmentGUI {
     textPanel.add(descLabel)
     textPanel.add(Box.createVerticalStrut(5))
     textPanel.add(statusLabel)
-    textPanel.add(Box.createVerticalGlue()) // Push content to top
+    textPanel.add(Box.createVerticalGlue())
 
     mainPanel.add(iconLabel)
     mainPanel.add(textPanel)
@@ -343,17 +345,20 @@ object DevelopmentGUI {
 
     sectionPanel.add(headerPanel)
 
-    // Analysis cards with improved spacing and design
+    // Analysis cards with vibrant colors
     sectionPanel.add(createAnalysisCard("01", "Life Expectancy Leadership", "Health Excellence",
-      "Which country achieved the highest life expectancy standards?", lifeExpectancyAnswer(analysis), primaryGreen, "🏥"))
+      "Which country achieved the highest life expectancy standards?", lifeExpectancyAnswer(analysis),
+      vibrantGreen, "🏥"))
     sectionPanel.add(Box.createVerticalStrut(25))
 
     sectionPanel.add(createAnalysisCard("02", "Human Development Mastery", "Social Progress",
-      "Which nation leads in comprehensive human development?", healthEducationAnswer(analysis), primaryBlue, "🎓"))
+      "Which nation leads in comprehensive human development?", healthEducationAnswer(analysis),
+      vibrantBlue, "🎓"))
     sectionPanel.add(Box.createVerticalStrut(25))
 
     sectionPanel.add(createAnalysisCard("03", "Environmental Impact Assessment", "Environmental Intelligence",
-      "Which country experienced the most significant forest loss?", forestLossAnswer(analysis), new Color(239, 68, 68), "🌲"))
+      "Which country experienced the most significant forest loss?", forestLossAnswer(analysis),
+      vibrantRed, "🌲"))
 
     sectionPanel
   }
@@ -363,59 +368,63 @@ object DevelopmentGUI {
     val card = new JPanel(new BorderLayout())
     card.setBackground(Color.WHITE)
     card.setBorder(BorderFactory.createCompoundBorder(
-      BorderFactory.createLineBorder(borderColor, 1),
+      BorderFactory.createLineBorder(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 100), 2),
       BorderFactory.createEmptyBorder(30, 35, 30, 35)
     ))
-    card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 160))
+    card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 180))
 
     val leftPanel = new JPanel(new BorderLayout())
     leftPanel.setBackground(Color.WHITE)
 
-    // Top section with number, emoji, and title
+    // Top section with vibrant number, emoji, and title
     val topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0))
     topPanel.setBackground(Color.WHITE)
 
-    // Circular number badge
+    // Circular number badge with solid color (no gradient to avoid color range issues)
     val numberBadge = new JPanel() {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
         val g2 = g.asInstanceOf[Graphics2D]
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         g2.setColor(accentColor)
-        g2.fillOval(0, 0, 45, 45)
+        g2.fillOval(0, 0, 50, 50)
+        g2.setColor(new Color(0, 0, 0, 20))
+        g2.drawOval(2, 2, 46, 46)
         g2.setColor(Color.WHITE)
-        g2.setFont(new Font("Arial", Font.BOLD, 16))
+        g2.setFont(new Font("Arial", Font.BOLD, 18))
         val fm = g2.getFontMetrics
-        val x = (45 - fm.stringWidth(number)) / 2
-        val y = ((45 - fm.getHeight) / 2) + fm.getAscent
+        val x = (50 - fm.stringWidth(number)) / 2
+        val y = ((50 - fm.getHeight) / 2) + fm.getAscent
         g2.drawString(number, x, y)
       }
     }
-    numberBadge.setPreferredSize(new Dimension(45, 45))
+    numberBadge.setPreferredSize(new Dimension(50, 50))
     numberBadge.setBackground(Color.WHITE)
 
-    // Emoji with background circle
+    // Emoji with vibrant background
     val emojiPanel = new JPanel() {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
         val g2 = g.asInstanceOf[Graphics2D]
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 20))
-        g2.fillOval(5, 5, 35, 35)
-        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18))
+        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 40))
+        g2.fillOval(0, 0, 50, 50)
+        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 80))
+        g2.fillOval(8, 8, 34, 34)
+        g2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22))
         val fm = g2.getFontMetrics
-        val x = (45 - fm.stringWidth(emoji)) / 2
-        val y = ((45 - fm.getHeight) / 2) + fm.getAscent
+        val x = (50 - fm.stringWidth(emoji)) / 2
+        val y = ((50 - fm.getHeight) / 2) + fm.getAscent
         g2.drawString(emoji, x, y)
       }
     }
-    emojiPanel.setPreferredSize(new Dimension(45, 45))
+    emojiPanel.setPreferredSize(new Dimension(50, 50))
     emojiPanel.setBackground(Color.WHITE)
 
     val titleLabel = new JLabel(title)
-    titleLabel.setFont(new Font("Arial", Font.BOLD, 22))
+    titleLabel.setFont(new Font("Arial", Font.BOLD, 24))
     titleLabel.setForeground(textPrimary)
-    titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 0))
+    titleLabel.setBorder(BorderFactory.createEmptyBorder(12, 20, 0, 0))
 
     topPanel.add(numberBadge)
     topPanel.add(Box.createHorizontalStrut(15))
@@ -425,38 +434,40 @@ object DevelopmentGUI {
     // Middle section with question
     val middlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0))
     middlePanel.setBackground(Color.WHITE)
-    middlePanel.setBorder(BorderFactory.createEmptyBorder(12, 60, 0, 0))
+    middlePanel.setBorder(BorderFactory.createEmptyBorder(15, 65, 0, 0))
 
     val questionLabel = new JLabel(question)
-    questionLabel.setFont(new Font("Arial", Font.PLAIN, 15))
+    questionLabel.setFont(new Font("Arial", Font.PLAIN, 16))
     questionLabel.setForeground(textSecondary)
 
     middlePanel.add(questionLabel)
 
-    // Bottom section with answer (if available)
+    // Bottom section with vibrant answer
     val bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0))
     bottomPanel.setBackground(Color.WHITE)
-    bottomPanel.setBorder(BorderFactory.createEmptyBorder(8, 60, 0, 0))
+    bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 65, 0, 0))
 
     val answerLabel = new JLabel(answer)
-    answerLabel.setFont(new Font("Arial", Font.BOLD, 14))
+    answerLabel.setFont(new Font("Arial", Font.BOLD, 15))
     answerLabel.setForeground(accentColor)
 
     bottomPanel.add(answerLabel)
 
-    // Progress bar
+    // Vibrant progress bar
     val progressPanel = new JPanel() {
       override def paintComponent(g: Graphics): Unit = {
         super.paintComponent(g)
         val g2 = g.asInstanceOf[Graphics2D]
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 30))
-        g2.fillRoundRect(60, 8, 400, 3, 2, 2)
+        g2.setColor(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 25))
+        g2.fillRoundRect(65, 8, 400, 5, 3, 3)
         g2.setColor(accentColor)
-        g2.fillRoundRect(60, 8, 300, 3, 2, 2)
+        g2.fillRoundRect(65, 8, 320, 5, 3, 3)
+        g2.setColor(new Color(255, 255, 255, 100))
+        g2.fillRoundRect(65, 8, 320, 2, 2, 2)
       }
     }
-    progressPanel.setPreferredSize(new Dimension(500, 20))
+    progressPanel.setPreferredSize(new Dimension(500, 25))
     progressPanel.setBackground(Color.WHITE)
 
     leftPanel.add(topPanel, BorderLayout.NORTH)
@@ -467,15 +478,15 @@ object DevelopmentGUI {
     bottomContainer.setBackground(Color.WHITE)
     bottomContainer.add(progressPanel, BorderLayout.SOUTH)
 
-    // Right side - Enhanced category badge
+    // Enhanced vibrant category badge
     val categoryBadge = new JLabel(category)
-    categoryBadge.setFont(new Font("Arial", Font.BOLD, 12))
-    categoryBadge.setForeground(accentColor)
+    categoryBadge.setFont(new Font("Arial", Font.BOLD, 13))
+    categoryBadge.setForeground(Color.WHITE)
     categoryBadge.setOpaque(true)
-    categoryBadge.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 15))
+    categoryBadge.setBackground(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 200))
     categoryBadge.setBorder(BorderFactory.createCompoundBorder(
-      BorderFactory.createLineBorder(new Color(accentColor.getRed, accentColor.getGreen, accentColor.getBlue, 40), 1),
-      BorderFactory.createEmptyBorder(10, 18, 10, 18)
+      BorderFactory.createLineBorder(accentColor, 2),
+      BorderFactory.createEmptyBorder(12, 20, 12, 20)
     ))
 
     val rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT))
