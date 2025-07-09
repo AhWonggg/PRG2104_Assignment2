@@ -1,5 +1,7 @@
 import java.awt._
 import javax.swing._
+import javax.swing.WindowConstants._
+import javax.swing.ScrollPaneConstants._
 
 object DevelopmentGUI {
 
@@ -28,7 +30,7 @@ object DevelopmentGUI {
       val analysis = loadData()
 
       val frame = new JFrame("Global Development Analytics")
-      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
+      frame.setDefaultCloseOperation(EXIT_ON_CLOSE)
       frame.setSize(1400, 900)
       frame.setLocationRelativeTo(null)
       frame.setBackground(backgroundColor)
@@ -58,8 +60,7 @@ object DevelopmentGUI {
     contentPanel.add(Box.createVerticalStrut(40))
     contentPanel.add(createMetricsSection(analysis))
     contentPanel.add(Box.createVerticalStrut(50))
-    contentPanel.add(createSystemStatusSection(analysis))
-    contentPanel.add(Box.createVerticalStrut(60))
+    // System status section removed for cleaner design
     contentPanel.add(createAnalysisSection(analysis))
 
     contentPanel
@@ -69,8 +70,8 @@ object DevelopmentGUI {
     val scrollPane = new JScrollPane(contentPanel)
     scrollPane.setBorder(null)
     scrollPane.getViewport.setBackground(backgroundColor)
-    scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED)
-    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER)
+    scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED)
+    scrollPane.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER)
     scrollPane.getVerticalScrollBar.setUnitIncrement(16)
     scrollPane
   }
@@ -108,7 +109,7 @@ object DevelopmentGUI {
   private def createHeaderSection(): JPanel = {
     val headerPanel = new JPanel(new BorderLayout())
     headerPanel.setBackground(backgroundColor)
-    headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80))
+    headerPanel.setMaximumSize(new Dimension(Int.MaxValue, 80))
 
     headerPanel.add(createHeaderLeft(), BorderLayout.WEST)
     headerPanel.add(createHeaderRight(), BorderLayout.EAST)
@@ -169,43 +170,16 @@ object DevelopmentGUI {
   }
 
   private def createHeaderRight(): JPanel = {
-    val statusPanel = new JPanel() {
-      override def paintComponent(g: Graphics): Unit = {
-        super.paintComponent(g)
-        val compSize = getSize()
-        paintShadow(g, compSize.width, compSize.height, new Color(0, 0, 0, 10), 2, 20)
-        paintGradientBackground(g, compSize.width - 2, compSize.height - 2, Color.WHITE, new Color(249, 250, 251), 20)
-
-        val g2 = g.asInstanceOf[Graphics2D]
-        g2.setColor(new Color(34, 197, 94, 40))
-        g2.setStroke(new BasicStroke(1.5f))
-        g2.drawRoundRect(0, 0, compSize.width - 2, compSize.height - 2, 20, 20)
-      }
-    }
-    statusPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 12))
-    statusPanel.setPreferredSize(new Dimension(200, 45))
-
-    val checkIcon = new JLabel("✓")
-    checkIcon.setFont(new Font("Arial", Font.BOLD, 16))
-    checkIcon.setForeground(successGreen)
-
-    val statusLabel = new JLabel("System Operational")
-    statusLabel.setFont(new Font("Arial", Font.BOLD, 14))
-    statusLabel.setForeground(successGreen)
-
-    statusPanel.add(checkIcon)
-    statusPanel.add(statusLabel)
-
     val rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT))
     rightPanel.setBackground(backgroundColor)
-    rightPanel.add(statusPanel)
+    // Status badge removed - clean header design
     rightPanel
   }
 
   private def createMetricsSection(analysis: Analysis): JPanel = {
     val metricsPanel = new JPanel(new GridLayout(1, 3, 30, 0))
     metricsPanel.setBackground(backgroundColor)
-    metricsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200))
+    metricsPanel.setMaximumSize(new Dimension(Int.MaxValue, 200))
 
     val (recordCount, countryCount, yearRange) = getMetricsData(analysis)
 
@@ -336,13 +310,12 @@ object DevelopmentGUI {
     }
     statusCard.setLayout(new BorderLayout())
     statusCard.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30))
-    statusCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150))
+    statusCard.setMaximumSize(new Dimension(Int.MaxValue, 150))
 
     val mainPanel = createStatusMainPanel(analysis)
-    val progressPanel = createStatusProgressBar()
+    // Progress bar removed from system status
 
     statusCard.add(mainPanel, BorderLayout.CENTER)
-    statusCard.add(progressPanel, BorderLayout.SOUTH)
     statusCard
   }
 
@@ -410,7 +383,7 @@ object DevelopmentGUI {
         g2.setPaint(gradient)
         g2.fillRoundRect(0, 5, (compSize.width * 0.95).toInt, 3, 2, 2)
       }
-      setPreferredSize(new Dimension(Integer.MAX_VALUE, 15))
+      setPreferredSize(new Dimension(Int.MaxValue, 15))
       setOpaque(false)
     }
   }
@@ -494,23 +467,16 @@ object DevelopmentGUI {
 
     card.setLayout(new BorderLayout())
     card.setBorder(BorderFactory.createEmptyBorder(35, 40, 35, 40))
-    card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200))
+    card.setMaximumSize(new Dimension(Int.MaxValue, 200))
 
     val leftPanel = createAnalysisCardLeft(number, title, question, answer, accentColor, emoji)
-    val rightIndicator = createCircularIndicator(accentColor)
-    val progressPanel = createAnalysisProgressBar(accentColor)
+    // Progress bar removed from analysis cards
 
     val mainContainer = new JPanel(new BorderLayout())
     mainContainer.setOpaque(false)
     mainContainer.add(leftPanel, BorderLayout.CENTER)
-    mainContainer.add(createRightPanel(rightIndicator), BorderLayout.EAST)
-
-    val bottomContainer = new JPanel(new BorderLayout())
-    bottomContainer.setOpaque(false)
-    bottomContainer.add(progressPanel, BorderLayout.SOUTH)
 
     card.add(mainContainer, BorderLayout.CENTER)
-    card.add(bottomContainer, BorderLayout.SOUTH)
     card
   }
 
